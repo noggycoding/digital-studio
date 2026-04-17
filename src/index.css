@@ -1,0 +1,49 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  background: #000;
+  color: #fff;
+  font-family: 'Raleway', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+:root {
+  --black: #000000;
+  --charcoal: #2E2E2E;
+  --dark-gray: #4A4A4A;
+  --mid-gray: #808080;
+  --light-gray: #C8C8C8;
+  --white: #FFFFFF;
+  --glass-bg: rgba(255, 255, 255, 0.04);
+  --glass-border: rgba(255, 255, 255, 0.09);
+  --glass-blur: blur(20px);
+}
+
+::selection {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  cursor: pointer;
+  font-family: inherit;
+  border: none;
+  background: none;
+}
+
+img, video {
+  display: block;
+  max-width: 100%;
+}

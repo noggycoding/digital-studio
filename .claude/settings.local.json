@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:api.github.com)",
+      "Bash(curl -s \"https://raw.githubusercontent.com/HermeticOrmus/LibreUIUX-Claude-Code/main/.claude/commands/ui-modern.md\")",
+      "Bash(curl -s \"https://raw.githubusercontent.com/Koomook/claude-frontend-skills/main/skills/distinctive-frontend.md\")",
+      "Bash(curl -s \"https://raw.githubusercontent.com/HermeticOrmus/LibreUIUX-Claude-Code/main/.claude/commands/ui-critique.md\")",
+      "Bash(curl -s \"https://raw.githubusercontent.com/HermeticOrmus/LibreUIUX-Claude-Code/main/.claude/commands/ui-review.md\")",
+      "Bash(curl -s \"https://raw.githubusercontent.com/HermeticOrmus/LibreUIUX-Claude-Code/main/.claude/commands/ui-responsive.md\")",
+      "Bash(curl -s \"https://raw.githubusercontent.com/HermeticOrmus/LibreUIUX-Claude-Code/main/.claude/commands/ui-synth.md\")",
+      "Bash(curl -s \"https://raw.githubusercontent.com/bencium/bencium-marketplace/main/bencium-innovative-ux-designer/skill.md\")",
+      "Bash(curl -s \"https://api.github.com/repos/bencium/bencium-marketplace/contents/bencium-innovative-ux-designer\")",
+      "Bash(python3 -c \"import sys,json; data=json.load\\(sys.stdin\\); [print\\(f['name']\\) for f in data]\")",
+      "Bash(curl -s \"https://api.github.com/repos/nextlevelbuilder/ui-ux-pro-max-skill/contents/\")",
+      "Bash(curl -s \"https://api.github.com/repos/bencium/bencium-marketplace/contents/\")",
+      "Bash(curl *)"
+    ]
+  }
+}
