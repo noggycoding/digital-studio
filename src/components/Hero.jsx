@@ -15,12 +15,20 @@ export default function Hero() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [animKey, setAnimKey]   = useState(0)
   const [motIdx, setMotIdx]     = useState(0)
+  const [scrolled, setScrolled] = useState(false)
 
   const heroRef = useRef(null)
   const dropRef = useRef(null)
 
   const t           = translations[lang]
   const currentLang = LANGUAGES.find(l => l.code === lang)
+
+  // Scroll detection for nav style
+  useEffect(() => {
+    const handler = () => setScrolled(window.scrollY > 60)
+    window.addEventListener('scroll', handler, { passive: true })
+    return () => window.removeEventListener('scroll', handler)
+  }, [])
 
   // click-outside to close dropdown
   useEffect(() => {
@@ -43,14 +51,15 @@ export default function Hero() {
     return () => clearInterval(id)
   }, [lang, t.motivations.length])
 
-  // ── GSAP entrance timeline ─────────────────────────────────
+  // ── GSAP entrance timeline ───────────────────────────────
   useGSAP(() => {
     const ctx = gsap.context(() => {
-      const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
+      const tl = gsap.timeline({ defaults: { ease: 'power3.out' }, delay: 2.2 })
 
       tl.from('.hero-nav', { y: -22, opacity: 0, duration: 0.9 })
         .from('.nav-divider', { scaleX: 0, duration: 1, ease: 'power2.inOut' }, '-=0.5')
         .from('.social-rail', { x: -14, opacity: 0, duration: 0.9 }, '-=0.6')
+        .from('.hero-eyebrow', { y: 20, opacity: 0, duration: 0.7 }, '-=0.4')
 
       // headline chars
       const charEls = gsap.utils.toArray('.hl-char')
@@ -83,6 +92,20 @@ export default function Hero() {
       gsap.to('.layer-light', {
         opacity: 0.7, duration: 4, yoyo: true, repeat: -1, ease: 'sine.inOut',
       })
+
+      // Floating particles
+      gsap.utils.toArray('.hero-particle').forEach((p) => {
+        gsap.to(p, {
+          y: `random(-80, 80)`,
+          x: `random(-40, 40)`,
+          opacity: `random(0.1, 0.5)`,
+          duration: `random(4, 8)`,
+          repeat: -1,
+          yoyo: true,
+          ease: 'sine.inOut',
+          delay: `random(0, 3)`,
+        })
+      })
     }, heroRef)
 
     return () => ctx.revert()
@@ -95,8 +118,17 @@ export default function Hero() {
     setMotIdx(0)
   }
 
+  // Generate particles
+  const particles = Array.from({ length: 20 }, (_, i) => ({
+    id: i,
+    left: `${Math.random() * 100}%`,
+    top: `${Math.random() * 100}%`,
+    size: Math.random() * 3 + 1,
+    delay: Math.random() * 5,
+  }))
+
   return (
-    <section className="hero" ref={heroRef}>
+    <section className="hero" ref={heroRef} id="hero">
 
       {/* ── Video ── */}
       <video className="hero-video" autoPlay muted loop playsInline>
@@ -107,10 +139,26 @@ export default function Hero() {
       <div className="layer-overlay" />
       <div className="layer-light" />
       <div className="layer-vignette" />
+      <div className="layer-noise" />
+
+      {/* ── Floating Particles ── */}
+      {particles.map(p => (
+        <div
+          key={p.id}
+          className="hero-particle"
+          style={{
+            left: p.left,
+            top: p.top,
+            width: p.size + 'px',
+            height: p.size + 'px',
+            animationDelay: p.delay + 's',
+          }}
+        />
+      ))}
 
       {/* ── Nav ── */}
-      <nav className="hero-nav">
-        <a href="#" className="nav-logo">
+      <nav className={`hero-nav${scrolled ? ' hero-nav--scrolled' : ''}`}>
+        <a href="#hero" className="nav-logo">
           STUDIO<span className="logo-accent">.</span>
         </a>
 
@@ -163,6 +211,7 @@ export default function Hero() {
 
         {/* Left — headline + CTAs */}
         <div className="hero-left">
+          <span className="hero-eyebrow">{t.eyebrow}</span>
           <h1 className="hero-headline">
             {t.headline.map((line, i) => (
               <span key={i} className="hl-row">
@@ -180,7 +229,10 @@ export default function Hero() {
           </h1>
 
           <div className="hero-ctas">
-            <a href="#portfolio" className="btn-primary">{t.cta_primary}</a>
+            <a href="#portfolio" className="btn-primary">
+              <span className="btn-shine" />
+              {t.cta_primary}
+            </a>
             <a href="#contact" className="btn-ghost">
               {t.cta_secondary}
               <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
@@ -232,7 +284,7 @@ export default function Hero() {
 
       {/* ── Scroll indicator ── */}
       <div className="scroll-indicator">
-        <div className="scroll-dot" />
+        <span className="scroll-label">Scroll</span>
         <div className="scroll-track"><div className="scroll-thumb" /></div>
       </div>
 
