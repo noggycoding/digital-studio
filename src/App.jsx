@@ -1,7 +1,7 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import Lenis from 'lenis'
+import Navbar from './components/Navbar'
 import Hero from './components/Hero'
-import Marquee from './components/Marquee'
 import Services from './components/Services'
 import Portfolio from './components/Portfolio'
 import About from './components/About'
@@ -12,6 +12,7 @@ import PageLoader from './components/PageLoader'
 
 export default function App() {
   const [loaded, setLoaded] = useState(false)
+  const [lang, setLang]     = useState('es')
 
   useEffect(() => {
     const lenis = new Lenis({
@@ -26,7 +27,6 @@ export default function App() {
     }
     requestAnimationFrame(raf)
 
-    // Simulate load
     const timer = setTimeout(() => setLoaded(true), 2200)
 
     return () => {
@@ -39,9 +39,9 @@ export default function App() {
     <>
       <PageLoader loaded={loaded} />
       <CustomCursor />
+      <Navbar lang={lang} onLangChange={setLang} />
       <main>
-        <Hero />
-        <Marquee />
+        <Hero lang={lang} />
         <Services />
         <Portfolio />
         <About />

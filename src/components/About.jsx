@@ -72,6 +72,15 @@ export default function About() {
 
   return (
     <section className="about" id="about" ref={sectionRef}>
+
+      <div className="section-fade-top" />
+      <div className="section-fade-bottom" />
+
+      <video className="ab-video" autoPlay muted loop playsInline>
+        <source src="/robot.mp4" type="video/mp4" />
+      </video>
+      <div className="ab-video-overlay" />
+
       <div className="ab-inner">
         <div className="ab-header">
           <div className="ab-header-left">
@@ -93,21 +102,29 @@ export default function About() {
 
         {/* ── Stats row ── */}
         <div className="ab-stats-row">
-          <div className="ab-stat">
+          <div className="ab-stat float-slow">
             <span className="ab-counter" data-target="98" data-suffix="%">0%</span>
             <span className="ab-stat-label">Satisfacción</span>
           </div>
           <div className="ab-stat-sep" />
-          <div className="ab-stat">
+          <div className="ab-stat float-slow float-d1">
             <span className="ab-counter" data-target="10" data-suffix="+">0+</span>
             <span className="ab-stat-label">Proyectos entregados</span>
           </div>
           <div className="ab-stat-sep" />
-          <div className="ab-stat">
+          <div className="ab-stat float-slow float-d2">
             <span className="ab-counter" data-target="24" data-suffix="/7">0/7</span>
             <span className="ab-stat-label">Soporte</span>
           </div>
         </div>
+
+        {/* ── Highlighted phrase ── */}
+        <blockquote className="ab-phrase float-rotate">
+          <span className="ab-phrase-mark">"</span>
+          Construimos presencias digitales que no solo se ven bien —
+          <em> trabajan para ti 24/7.</em>
+          <span className="ab-phrase-mark">"</span>
+        </blockquote>
 
         <div className="ab-divider" />
 

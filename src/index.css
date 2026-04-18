@@ -32,8 +32,8 @@
   --glass-blur: blur(24px);
   
   /* ── Typography ── */
-  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body: 'Cormorant Garamond', Georgia, serif;
+  --font-display: 'Cormorant Garamond', Georgia, serif;
   
   /* ── Spacing ── */
   --section-pad: clamp(5rem, 10vh, 8rem);
@@ -52,6 +52,8 @@ body {
   color: var(--white);
   font-family: var(--font-body);
   font-weight: 300;
+  font-size: 18px;
+  letter-spacing: 0.03em;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
@@ -94,27 +96,58 @@ html.lenis, html.lenis body {
 }
 
 /* ── Custom cursor ── */
-.custom-cursor {
+* { cursor: none !important; }
+
+/* ── Cursor: white square with glow ── */
+.cur-dot {
   position: fixed;
-  width: 18px;
-  height: 18px;
-  border: 1.5px solid rgba(255, 255, 255, 0.5);
-  border-radius: 50%;
+  top: 0;
+  left: 0;
+  width: 12px;
+  height: 12px;
+  background: #fff;
   pointer-events: none;
-  z-index: 9999;
-  transform: translate(-50%, -50%);
-  transition: width 0.3s cubic-bezier(0.22, 1, 0.36, 1),
-              height 0.3s cubic-bezier(0.22, 1, 0.36, 1),
-              border-color 0.3s ease,
-              background 0.3s ease;
-  mix-blend-mode: difference;
+  z-index: 99999;
+  margin-top: -6px;
+  margin-left: -6px;
+  will-change: transform;
+  box-shadow:
+    0 0 6px rgba(255,255,255,0.9),
+    0 0 14px rgba(255,255,255,0.5),
+    0 0 28px rgba(255,255,255,0.2);
+  transition: width 0.22s cubic-bezier(0.22,1,0.36,1),
+              height 0.22s cubic-bezier(0.22,1,0.36,1),
+              margin 0.22s cubic-bezier(0.22,1,0.36,1),
+              box-shadow 0.22s ease,
+              opacity 0.22s ease;
 }
 
-.custom-cursor.hovering {
-  width: 48px;
-  height: 48px;
-  border-color: rgba(180, 210, 255, 0.6);
-  background: rgba(180, 210, 255, 0.08);
+.cur-ring { display: none; }
+
+/* Hover: square grows, glow intensifies */
+.cur-dot.cur-hover {
+  width: 18px;
+  height: 18px;
+  margin-top: -9px;
+  margin-left: -9px;
+  background: rgba(255,255,255,0.12);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.7),
+    0 0 12px rgba(255,255,255,0.6),
+    0 0 28px rgba(255,255,255,0.3),
+    0 0 48px rgba(255,255,255,0.12);
+}
+
+/* Click: snaps smaller + brighter burst */
+.cur-dot.cur-click {
+  width: 8px;
+  height: 8px;
+  margin-top: -4px;
+  margin-left: -4px;
+  box-shadow:
+    0 0 8px rgba(255,255,255,1),
+    0 0 20px rgba(255,255,255,0.8),
+    0 0 40px rgba(180,210,255,0.5);
 }
 
 /* ── Page loader ── */
@@ -217,4 +250,54 @@ html.lenis, html.lenis body {
 .section-fade-in.visible {
   opacity: 1;
   transform: translateY(0);
+}
+
+/* ── Floating / levitation animations ── */
+@keyframes floatY {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-10px); }
+}
+
+@keyframes floatYsm {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-6px); }
+}
+
+@keyframes floatRotate {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  33%       { transform: translateY(-8px) rotate(1deg); }
+  66%       { transform: translateY(-4px) rotate(-0.8deg); }
+}
+
+.float-slow   { animation: floatY 6s ease-in-out infinite; }
+.float-medium { animation: floatY 4s ease-in-out infinite; }
+.float-fast   { animation: floatYsm 3s ease-in-out infinite; }
+.float-rotate { animation: floatRotate 5s ease-in-out infinite; }
+
+/* staggered start */
+.float-d1 { animation-delay: 0.8s; }
+.float-d2 { animation-delay: 1.6s; }
+.float-d3 { animation-delay: 2.4s; }
+
+/* ── Cross-section video blending ── */
+.section-fade-top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 200px;
+  background: linear-gradient(to bottom, var(--bg-primary), transparent);
+  z-index: 3;
+  pointer-events: none;
+}
+
+.section-fade-bottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 200px;
+  background: linear-gradient(to top, var(--bg-primary), transparent);
+  z-index: 3;
+  pointer-events: none;
 }

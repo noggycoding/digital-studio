@@ -7,37 +7,13 @@ import './Hero.css'
 
 gsap.registerPlugin(useGSAP)
 
-const NAV_KEYS = ['services', 'portfolio', 'about', 'contact']
-
-export default function Hero() {
-  const [lang, setLang]         = useState('es')
-  const [langOpen, setLangOpen] = useState(false)
-  const [menuOpen, setMenuOpen] = useState(false)
-  const [animKey, setAnimKey]   = useState(0)
-  const [motIdx, setMotIdx]     = useState(0)
-  const [scrolled, setScrolled] = useState(false)
-
+export default function Hero({ lang = 'es', onAnimKey }) {
+  const [animKey, setAnimKey] = useState(0)
+  const [motIdx, setMotIdx]   = useState(0)
   const heroRef = useRef(null)
-  const dropRef = useRef(null)
 
   const t           = translations[lang]
   const currentLang = LANGUAGES.find(l => l.code === lang)
-
-  // Scroll detection for nav style
-  useEffect(() => {
-    const handler = () => setScrolled(window.scrollY > 60)
-    window.addEventListener('scroll', handler, { passive: true })
-    return () => window.removeEventListener('scroll', handler)
-  }, [])
-
-  // click-outside to close dropdown
-  useEffect(() => {
-    const handler = (e) => {
-      if (dropRef.current && !dropRef.current.contains(e.target)) setLangOpen(false)
-    }
-    document.addEventListener('mousedown', handler)
-    return () => document.removeEventListener('mousedown', handler)
-  }, [])
 
   // RTL for Arabic
   useEffect(() => {
@@ -56,12 +32,11 @@ export default function Hero() {
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({ defaults: { ease: 'power3.out' }, delay: 2.2 })
 
-      tl.from('.hero-nav', { y: -22, opacity: 0, duration: 0.9 })
-        .from('.nav-divider', { scaleX: 0, duration: 1, ease: 'power2.inOut' }, '-=0.5')
+      tl.from('.nav-divider', { scaleX: 0, duration: 1, ease: 'power2.inOut' })
         .from('.social-rail', { x: -14, opacity: 0, duration: 0.9 }, '-=0.6')
-        .from('.hero-eyebrow', { y: 20, opacity: 0, duration: 0.7 }, '-=0.4')
+        .from('.hero-brand-title', { y: 60, opacity: 0, duration: 1.2, ease: 'power3.out', letterSpacing: '0.02em' }, '-=0.4')
+        .from('.hero-eyebrow', { y: 20, opacity: 0, duration: 0.7 }, '-=0.5')
 
-      // headline chars
       const charEls = gsap.utils.toArray('.hl-char')
       tl.from(charEls, {
         y: '115%',
@@ -70,11 +45,8 @@ export default function Hero() {
         ease: 'power3.out',
       }, '-=0.2')
 
-      // CTAs
         .from('.btn-primary', { x: -16, opacity: 0, duration: 0.65 }, '-=0.1')
         .from('.btn-ghost',   { x: -10, opacity: 0, duration: 0.65 }, '-=0.5')
-
-      // right column
         .from('.sub-word', {
           y: '100%',
           duration: 0.42,
@@ -83,17 +55,13 @@ export default function Hero() {
         }, '-=0.9')
         .from('.hero-stats',  { x: 18, opacity: 0, duration: 0.8 }, '-=0.4')
         .from('.hero-badge',  { y: 10, opacity: 0, duration: 0.6 }, '-=0.5')
-
-      // bottom anchors
         .from('.scroll-indicator', { y: 10, opacity: 0, duration: 0.7 }, '-=0.4')
         .from('.hero-section-num', { opacity: 0, duration: 0.8 },        '-=0.5')
 
-      // light blob pulse
       gsap.to('.layer-light', {
         opacity: 0.7, duration: 4, yoyo: true, repeat: -1, ease: 'sine.inOut',
       })
 
-      // Floating particles
       gsap.utils.toArray('.hero-particle').forEach((p) => {
         gsap.to(p, {
           y: `random(-80, 80)`,
@@ -111,14 +79,12 @@ export default function Hero() {
     return () => ctx.revert()
   }, { scope: heroRef, dependencies: [animKey] })
 
-  const handleLangChange = (code) => {
-    setLang(code)
-    setLangOpen(false)
+  const handleLangChange = () => {
     setAnimKey(k => k + 1)
     setMotIdx(0)
+    onAnimKey?.()
   }
 
-  // Generate particles
   const particles = Array.from({ length: 20 }, (_, i) => ({
     id: i,
     left: `${Math.random() * 100}%`,
@@ -132,7 +98,7 @@ export default function Hero() {
 
       {/* ── Video ── */}
       <video className="hero-video" autoPlay muted loop playsInline>
-        <source src="/video-hero.mp4" type="video/mp4" />
+        <source src="/clean_animation.mp4" type="video/mp4" />
       </video>
 
       {/* ── Layers ── */}
@@ -156,55 +122,13 @@ export default function Hero() {
         />
       ))}
 
-      {/* ── Nav ── */}
-      <nav className={`hero-nav${scrolled ? ' hero-nav--scrolled' : ''}`}>
-        <a href="#hero" className="nav-logo">
-          STUDIO<span className="logo-accent">.</span>
-        </a>
-
-        <div className={`nav-links${menuOpen ? ' nav-links--open' : ''}`}>
-          {NAV_KEYS.map(k => (
-            <a key={k} href={`#${k}`} className="nav-link" onClick={() => setMenuOpen(false)}>
-              {t.nav[k]}
-            </a>
-          ))}
-        </div>
-
-        <div className="nav-right">
-          <div className="lang-switcher" ref={dropRef}>
-            <button
-              className={`lang-btn${langOpen ? ' lang-btn--open' : ''}`}
-              onClick={() => setLangOpen(!langOpen)}
-            >
-              {currentLang.label}
-              <svg className="lang-chevron" width="7" height="5" viewBox="0 0 7 5" fill="none">
-                <path d="M1 1l2.5 3L6 1" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </button>
-
-            <div className={`lang-dropdown${langOpen ? ' lang-dropdown--open' : ''}`}>
-              {LANGUAGES.map(l => (
-                <button
-                  key={l.code}
-                  className={`lang-option${lang === l.code ? ' lang-option--active' : ''}`}
-                  onClick={() => handleLangChange(l.code)}
-                >
-                  <span className="lang-code">{l.label}</span>
-                  <span className="lang-name">{l.name}</span>
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <button className="hamburger" onClick={() => setMenuOpen(!menuOpen)} aria-label="Menu">
-            <span className={menuOpen ? 'open' : ''} />
-            <span className={menuOpen ? 'open' : ''} />
-          </button>
-        </div>
-      </nav>
-
       <div className="nav-divider" />
       <SocialRail />
+
+      {/* ── Brand title ── */}
+      <div className="hero-brand">
+        <h1 className="hero-brand-title">FRAME STUDIO</h1>
+      </div>
 
       {/* ── Two-column body ── */}
       <div className="hero-body" key={animKey}>
@@ -227,6 +151,8 @@ export default function Hero() {
               </span>
             ))}
           </h1>
+
+          <p className="hero-slogan-sub">{t.slogan}</p>
 
           <div className="hero-ctas">
             <a href="#portfolio" className="btn-primary">
@@ -265,7 +191,7 @@ export default function Hero() {
             </div>
           </div>
 
-          <div className="hero-badge">
+          <div className="hero-badge float-medium float-d1">
             <span className="badge-dot" />
             <span className="badge-text">10+ Projects delivered</span>
           </div>

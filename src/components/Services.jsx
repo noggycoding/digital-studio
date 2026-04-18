@@ -128,6 +128,7 @@ export default function Services() {
 
       {/* ── Top fade from Hero ── */}
       <div className="sv-top-fade" />
+      <div className="section-fade-bottom" />
 
       {/* ── Content ── */}
       <div className="sv-inner">
@@ -151,6 +152,13 @@ export default function Services() {
 
         <div className="sv-divider" />
 
+        {/* ── Highlighted phrase ── */}
+        <div className="sv-phrase-banner">
+          <span className="sv-phrase-line" aria-hidden="true">—</span>
+          <p className="sv-phrase-text">Tu negocio más inteligente que nunca</p>
+          <span className="sv-phrase-line" aria-hidden="true">—</span>
+        </div>
+
         <div className="sv-cards">
           {CARDS.map((card, i) => (
             <div className="sv-card" key={i}>
@@ -158,7 +166,7 @@ export default function Services() {
               <div className="sv-card-body">
                 <div className="sv-card-top">
                   <span className="sv-card-num">{card.num}</span>
-                  <div className="sv-card-icon">{card.icon}</div>
+                  <div className={`sv-card-icon float-slow float-d${(i % 3) + 1}`}>{card.icon}</div>
                 </div>
                 <div className="sv-card-content">
                   <h3 className="sv-card-title">{card.title}</h3>

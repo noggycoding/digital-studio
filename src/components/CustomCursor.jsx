@@ -1,61 +1,80 @@
 import { useEffect, useRef } from 'react'
 
 export default function CustomCursor() {
-  const cursorRef = useRef(null)
+  const dotRef  = useRef(null)
+  const ringRef = useRef(null)
 
   useEffect(() => {
-    const cursor = cursorRef.current
-    if (!cursor) return
+    if ('ontouchstart' in window) return
 
-    // Check for touch device
-    if ('ontouchstart' in window) {
-      cursor.style.display = 'none'
-      return
-    }
+    const dot  = dotRef.current
+    const ring = ringRef.current
+    if (!dot || !ring) return
 
-    let mouseX = 0, mouseY = 0
-    let curX = 0, curY = 0
+    let mx = 0, my = 0
+    let rx = 0, ry = 0
+    let raf
 
-    const move = (e) => {
-      mouseX = e.clientX
-      mouseY = e.clientY
+    const onMove = (e) => {
+      mx = e.clientX
+      my = e.clientY
+      dot.style.transform = `translate(${mx}px, ${my}px)`
     }
 
     const tick = () => {
-      curX += (mouseX - curX) * 0.15
-      curY += (mouseY - curY) * 0.15
-      cursor.style.left = curX + 'px'
-      cursor.style.top = curY + 'px'
-      requestAnimationFrame(tick)
+      rx += (mx - rx) * 0.1
+      ry += (my - ry) * 0.1
+      ring.style.transform = `translate(${rx}px, ${ry}px)`
+      raf = requestAnimationFrame(tick)
     }
 
-    const addHover = () => cursor.classList.add('hovering')
-    const removeHover = () => cursor.classList.remove('hovering')
+    const addHover = () => {
+      dot.classList.add('cur-hover')
+      ring.classList.add('cur-hover')
+    }
+    const removeHover = () => {
+      dot.classList.remove('cur-hover')
+      ring.classList.remove('cur-hover')
+    }
 
-    document.addEventListener('mousemove', move)
-    requestAnimationFrame(tick)
+    const addClick = () => {
+      dot.classList.add('cur-click')
+      ring.classList.add('cur-click')
+    }
+    const removeClick = () => {
+      dot.classList.remove('cur-click')
+      ring.classList.remove('cur-click')
+    }
 
-    const hoverables = document.querySelectorAll('a, button, .sv-card, .portfolio-card')
-    const observer = new MutationObserver(() => {
-      const els = document.querySelectorAll('a, button, .sv-card, .portfolio-card')
-      els.forEach(el => {
+    document.addEventListener('mousemove', onMove)
+    document.addEventListener('mousedown', addClick)
+    document.addEventListener('mouseup', removeClick)
+    raf = requestAnimationFrame(tick)
+
+    const attach = () => {
+      document.querySelectorAll('a, button, .sv-card, .portfolio-card, [data-cursor]').forEach(el => {
         el.addEventListener('mouseenter', addHover)
         el.addEventListener('mouseleave', removeHover)
       })
-    })
+    }
 
-    observer.observe(document.body, { childList: true, subtree: true })
-
-    hoverables.forEach(el => {
-      el.addEventListener('mouseenter', addHover)
-      el.addEventListener('mouseleave', removeHover)
-    })
+    attach()
+    const obs = new MutationObserver(attach)
+    obs.observe(document.body, { childList: true, subtree: true })
 
     return () => {
-      document.removeEventListener('mousemove', move)
-      observer.disconnect()
+      document.removeEventListener('mousemove', onMove)
+      document.removeEventListener('mousedown', addClick)
+      document.removeEventListener('mouseup', removeClick)
+      cancelAnimationFrame(raf)
+      obs.disconnect()
     }
   }, [])
 
-  return <div ref={cursorRef} className="custom-cursor" />
+  return (
+    <>
+      <div ref={dotRef}  className="cur-dot"  />
+      <div ref={ringRef} className="cur-ring" />
+    </>
+  )
 }

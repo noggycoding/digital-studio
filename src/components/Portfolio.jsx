@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import gsap from 'gsap'
 import { useGSAP } from '@gsap/react'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
@@ -9,41 +9,68 @@ gsap.registerPlugin(ScrollTrigger, useGSAP)
 const PROJECTS = [
   {
     id: 1,
-    title: 'Luxe Boutique',
-    category: 'E-commerce',
+    title: 'Ojo Rojo',
+    category: 'Sitio Web',
     year: '2024',
-    description: 'Tienda online premium con experiencia de compra inmersiva y diseño editorial.',
-    gradient: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)',
+    url: 'https://ojorojo-mx.vercel.app/',
+    description: 'Sitio con identidad visual fuerte, diseño moderno y experiencia de usuario fluida.',
   },
   {
     id: 2,
-    title: 'Nexa Corp',
-    category: 'Sitio Corporativo',
+    title: 'Yami House',
+    category: 'Sitio Web',
     year: '2024',
-    description: 'Presencia digital corporativa con animaciones cinematográficas y arquitectura moderna.',
-    gradient: 'linear-gradient(135deg, #0f0f23 0%, #1a0a2e 100%)',
+    url: 'https://yamihouse-mxl.netlify.app/',
+    description: 'Presencia digital con diseño limpio, navegación intuitiva y estética profesional.',
   },
   {
     id: 3,
-    title: 'Aura Studio',
-    category: 'Portfolio Creativo',
-    year: '2023',
-    description: 'Portafolio interactivo con transiciones fluidas y galería de proyectos dinámica.',
-    gradient: 'linear-gradient(135deg, #1a2332 0%, #0d1b2a 100%)',
-  },
-  {
-    id: 4,
-    title: 'Verde Market',
+    title: 'La Chopería',
     category: 'Landing Page',
-    year: '2023',
-    description: 'Landing page de alto rendimiento con automatización de leads y A/B testing.',
-    gradient: 'linear-gradient(135deg, #0a1a0f 0%, #1a2e1a 100%)',
+    year: '2024',
+    url: 'https://la-choperia.vercel.app/#inicio',
+    description: 'Landing page de alto impacto con secciones bien definidas y llamadas a la acción claras.',
   },
 ]
 
+function PreviewFrame({ url, title }) {
+  const [blocked, setBlocked] = useState(false)
+
+  return blocked ? (
+    <div className="pf-iframe-blocked">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" opacity="0.3">
+        <circle cx="12" cy="12" r="10" /><path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20" />
+      </svg>
+      <span>{title}</span>
+    </div>
+  ) : (
+    <iframe
+      src={url}
+      title={title}
+      className="pf-iframe"
+      loading="lazy"
+      sandbox="allow-scripts allow-same-origin allow-forms"
+      onError={() => setBlocked(true)}
+    />
+  )
+}
+
 export default function Portfolio() {
-  const sectionRef = useRef(null)
-  const [hoveredId, setHoveredId] = useState(null)
+  const sectionRef  = useRef(null)
+  const [active, setActive] = useState(null)
+
+  // lock body scroll when modal open
+  useEffect(() => {
+    document.body.style.overflow = active ? 'hidden' : ''
+    return () => { document.body.style.overflow = '' }
+  }, [active])
+
+  // close on Escape
+  useEffect(() => {
+    const handler = (e) => { if (e.key === 'Escape') setActive(null) }
+    window.addEventListener('keydown', handler)
+    return () => window.removeEventListener('keydown', handler)
+  }, [])
 
   useGSAP(() => {
     const ctx = gsap.context(() => {
@@ -65,8 +92,19 @@ export default function Portfolio() {
     return () => ctx.revert()
   }, { scope: sectionRef })
 
+  const openProject = PROJECTS.find(p => p.id === active)
+
   return (
     <section className="portfolio" id="portfolio" ref={sectionRef}>
+
+      <div className="section-fade-top" />
+      <div className="section-fade-bottom" />
+
+      <video className="pf-video" autoPlay muted loop playsInline>
+        <source src="/aura_animation.mp4" type="video/mp4" />
+      </video>
+      <div className="pf-video-overlay" />
+
       <div className="pf-inner">
         <div className="pf-header">
           <div className="pf-tag-row">
@@ -81,21 +119,33 @@ export default function Portfolio() {
 
         <div className="pf-grid">
           {PROJECTS.map((project) => (
-            <div
-              className={`portfolio-card${hoveredId === project.id ? ' active' : ''}`}
-              key={project.id}
-              onMouseEnter={() => setHoveredId(project.id)}
-              onMouseLeave={() => setHoveredId(null)}
-            >
-              <div className="pf-card-visual" style={{ background: project.gradient }}>
+            <div className="portfolio-card" key={project.id}>
+
+              {/* Live preview iframe */}
+              <div className="pf-card-visual">
+                <div className="pf-iframe-wrap">
+                  <PreviewFrame url={project.url} title={project.title} />
+                </div>
                 <div className="pf-card-overlay" />
                 <span className="pf-card-year">{project.year}</span>
-                <div className="pf-card-arrow">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                    <path d="M7 17L17 7M17 7H7M17 7V17" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
+
+                {/* Hover actions */}
+                <div className="pf-card-actions">
+                  <button className="pf-action-btn pf-action-expand" onClick={() => setActive(project.id)}>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M8 3H5a2 2 0 00-2 2v3m18 0V5a2 2 0 00-2-2h-3m0 18h3a2 2 0 002-2v-3M3 16v3a2 2 0 002 2h3" />
+                    </svg>
+                    Ver sitio
+                  </button>
+                  <a className="pf-action-btn pf-action-external" href={project.url} target="_blank" rel="noopener noreferrer">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3" />
+                    </svg>
+                    Nueva pestaña
+                  </a>
                 </div>
               </div>
+
               <div className="pf-card-info">
                 <span className="pf-card-cat">{project.category}</span>
                 <h3 className="pf-card-title">{project.title}</h3>
@@ -105,6 +155,40 @@ export default function Portfolio() {
           ))}
         </div>
       </div>
+
+      {/* ── Full-screen site viewer modal ── */}
+      {active && (
+        <div className="pf-modal" onClick={(e) => e.target === e.currentTarget && setActive(null)}>
+          <div className="pf-modal-inner">
+            <div className="pf-modal-bar">
+              <div className="pf-modal-url">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" opacity="0.5">
+                  <circle cx="12" cy="12" r="10" /><path d="M2 12h20" />
+                </svg>
+                <span>{openProject?.url}</span>
+              </div>
+              <div className="pf-modal-controls">
+                <a href={openProject?.url} target="_blank" rel="noopener noreferrer" className="pf-modal-btn">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3" />
+                  </svg>
+                </a>
+                <button className="pf-modal-btn pf-modal-close" onClick={() => setActive(null)}>
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                    <path d="M18 6L6 18M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <iframe
+              src={openProject?.url}
+              title={openProject?.title}
+              className="pf-modal-iframe"
+              sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+            />
+          </div>
+        </div>
+      )}
     </section>
   )
 }

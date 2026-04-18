@@ -1,5 +1,5 @@
 export default function PageLoader({ loaded }) {
-  const text = 'STUDIO.'
+  const text = 'FRAME STUDIO.'
 
   return (
     <div className={`page-loader${loaded ? ' loaded' : ''}`}>

@@ -16,7 +16,7 @@ export default function Footer() {
         <div className="ft-top">
           <div className="ft-brand">
             <a href="#hero" className="ft-logo">
-              STUDIO<span className="ft-logo-accent">.</span>
+              FRAME<span className="ft-logo-accent"> STUDIO.</span>
             </a>
             <p className="ft-tagline">
               Creamos experiencias digitales<br />que mueven negocios.
@@ -46,7 +46,7 @@ export default function Footer() {
 
         {/* ── Bottom ── */}
         <div className="ft-bottom">
-          <span className="ft-copyright">© {new Date().getFullYear()} STUDIO. Todos los derechos reservados.</span>
+          <span className="ft-copyright">© {new Date().getFullYear()} Frame Studio. Todos los derechos reservados.</span>
           <div className="ft-bottom-links">
             <a href="#" className="ft-bottom-link">Política de privacidad</a>
             <a href="#" className="ft-bottom-link">Términos</a>

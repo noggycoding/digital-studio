@@ -13,7 +13,7 @@
   flex-direction: column;
   font-family: var(--font-body);
   isolation: isolate;
-  contain: layout style;
+  isolation: isolate;
 }
 
 /* ── Video ── */
@@ -109,6 +109,21 @@
 }
 
 /* ── Nav ── */
+@keyframes navBorderSlide {
+  from { transform: translateX(0%); }
+  to   { transform: translateX(50%); }
+}
+
+@keyframes logoDot {
+  0%, 100% { opacity: 1; text-shadow: 0 0 8px rgba(180,210,255,0.8); }
+  50%       { opacity: 0.35; text-shadow: none; }
+}
+
+@keyframes linkFloat {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-2px); }
+}
+
 .hero-nav {
   position: fixed;
   top: 0;
@@ -119,16 +134,38 @@
   align-items: center;
   justify-content: space-between;
   padding: 1.9rem 3rem;
-  will-change: transform, opacity;
-  transition: background 0.4s ease, padding 0.4s ease, backdrop-filter 0.4s ease;
+  background: transparent;
+  transition: background 0.5s ease,
+              padding 0.4s ease,
+              backdrop-filter 0.5s ease,
+              border-color 0.5s ease;
+}
+
+/* Animated sliding bottom border */
+.hero-nav::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: -50%;
+  width: 200%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(180,210,255,0.0) 20%,
+    rgba(180,210,255,0.35) 40%,
+    rgba(180,210,255,0.0) 60%,
+    transparent 100%
+  );
+  animation: navBorderSlide 5s linear infinite;
+  pointer-events: none;
 }
 
 .hero-nav--scrolled {
-  padding: 1.2rem 3rem;
-  background: rgba(6, 6, 6, 0.85);
-  backdrop-filter: blur(24px) saturate(1.2);
-  -webkit-backdrop-filter: blur(24px) saturate(1.2);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 1.1rem 3rem;
+  background: rgba(4, 4, 4, 0.78);
+  backdrop-filter: blur(28px) saturate(1.4);
+  -webkit-backdrop-filter: blur(28px) saturate(1.4);
 }
 
 .nav-logo {
@@ -143,6 +180,8 @@
 .logo-accent {
   color: var(--accent);
   font-weight: 200;
+  animation: logoDot 3.5s ease-in-out infinite;
+  display: inline-block;
 }
 
 .nav-links {
@@ -154,25 +193,34 @@
   font-size: 0.62rem;
   font-weight: 400;
   letter-spacing: 0.22em;
-  color: rgba(255, 255, 255, 0.65);
+  color: rgba(255, 255, 255, 0.58);
   text-transform: uppercase;
   position: relative;
-  transition: color 0.3s;
+  transition: color 0.25s ease, transform 0.25s ease;
 }
 
-.nav-link::after {
+/* Sliding underline from center */
+.nav-link::before {
   content: '';
   position: absolute;
   bottom: -4px;
-  left: 0;
+  left: 50%;
   width: 0;
   height: 1px;
-  background: var(--accent);
-  transition: width 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  background: linear-gradient(to right, transparent, var(--accent), transparent);
+  transition: width 0.38s cubic-bezier(0.22, 1, 0.36, 1),
+              left 0.38s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.nav-link:hover { color: #fff; }
-.nav-link:hover::after { width: 100%; }
+.nav-link:hover {
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.nav-link:hover::before {
+  width: 100%;
+  left: 0;
+}
 
 /* Nav divider */
 .nav-divider {
@@ -307,15 +355,49 @@
   50%       { opacity: 1; }
 }
 
+/* ── Brand title ── */
+.hero-brand {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  padding: 1.8rem 5.5rem 0;
+  overflow: hidden;
+}
+
+.hero-brand-title {
+  font-size: clamp(4.5rem, 11vw, 13rem);
+  font-weight: 200;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #fff;
+  line-height: 0.9;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: clip;
+  width: 100%;
+}
+
 /* ── Eyebrow ── */
 .hero-eyebrow {
-  font-size: 0.6rem;
+  font-size: 0.78rem;
   font-weight: 400;
-  letter-spacing: 0.35em;
+  letter-spacing: 0.38em;
   text-transform: uppercase;
   color: var(--accent);
-  margin-bottom: 1.2rem;
+  margin-bottom: 0.8rem;
   display: block;
+}
+
+/* ── Slogan subtitle ── */
+.hero-slogan-sub {
+  font-size: clamp(1rem, 1.5vw, 1.25rem);
+  font-weight: 300;
+  font-style: italic;
+  letter-spacing: 0.03em;
+  color: rgba(255,255,255,0.48);
+  margin-top: 1rem;
+  margin-bottom: 0;
+  line-height: 1.5;
 }
 
 /* ── Hero body — two-column editorial grid ── */
@@ -327,7 +409,7 @@
   grid-template-columns: 1fr 300px;
   align-items: center;
   gap: 0 3rem;
-  padding: 0 4rem 4rem 5.5rem;
+  padding: 1.2rem 4rem 3rem 5.5rem;
 }
 
 .hero-left {
@@ -346,10 +428,10 @@
 /* ── Headline ── */
 .hero-headline {
   font-family: var(--font-body);
-  font-size: clamp(3rem, 7.2vw, 7.5rem);
-  font-weight: 100;
-  letter-spacing: 0.08em;
-  line-height: 1.03;
+  font-size: clamp(2.2rem, 5vw, 5.5rem);
+  font-weight: 200;
+  letter-spacing: 0.12em;
+  line-height: 1.05;
   color: #fff;
   margin: 0 0 1.8rem;
   display: flex;
@@ -390,11 +472,11 @@
 }
 
 .hero-sub {
-  font-size: 0.78rem;
+  font-size: 1.05rem;
   font-weight: 300;
-  letter-spacing: 0.04em;
-  color: rgba(255, 255, 255, 0.65);
-  line-height: 1.9;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.58);
+  line-height: 1.75;
   margin: 0;
 }
 
@@ -415,9 +497,9 @@
   border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: 4px;
   color: #fff;
-  font-size: 0.58rem;
+  font-size: 0.72rem;
   font-weight: 400;
-  letter-spacing: 0.3em;
+  letter-spacing: 0.28em;
   text-transform: uppercase;
   transition: background 0.35s, border-color 0.35s, transform 0.35s;
   will-change: transform;
@@ -449,9 +531,9 @@
   align-items: center;
   gap: 0.5rem;
   color: rgba(255, 255, 255, 0.6);
-  font-size: 0.58rem;
+  font-size: 0.72rem;
   font-weight: 400;
-  letter-spacing: 0.3em;
+  letter-spacing: 0.28em;
   text-transform: uppercase;
   transition: color 0.22s, gap 0.28s;
 }
@@ -623,6 +705,8 @@
 }
 
 @media (max-width: 768px) {
+  .hero-brand { padding: 1.2rem 2.5rem 0; }
+
   .nav-links {
     position: fixed;
     inset: 0;
@@ -662,9 +746,10 @@
 }
 
 @media (max-width: 520px) {
-  .hero-headline { font-size: clamp(2.6rem, 11vw, 3.5rem); }
+  .hero-brand { padding: 1rem 1.5rem 0; }
+  .hero-headline { font-size: clamp(2rem, 9vw, 3rem); }
   .hero-body { padding: 1.5rem 1.5rem 5rem; }
   .hero-right { display: none; }
   .social-rail { display: none; }
-  .hero-eyebrow { font-size: 0.52rem; }
+  .hero-eyebrow { font-size: 0.68rem; }
 }

@@ -1,6 +1,7 @@
 export const translations = {
   en: {
     eyebrow: 'Digital Studio',
+    slogan: 'Your business, smarter than ever',
     headline: ['We Build', 'Digital', 'Experiences'],
     subheading: 'Web design, automation & social media for modern businesses',
     cta_primary: 'View Our Work',
@@ -14,9 +15,15 @@ export const translations = {
       'First impressions happen online now',
       'Visibility is built, not improvised',
     ],
+    phrases: [
+      'Results that speak for themselves',
+      'Every pixel with purpose',
+      'We build, you grow',
+    ],
   },
   es: {
     eyebrow: 'Estudio Digital',
+    slogan: 'Tu negocio más inteligente que nunca',
     headline: ['Creamos', 'Experiencias', 'Digitales'],
     subheading: 'Diseño web, automatización y redes sociales para negocios modernos',
     cta_primary: 'Ver Portafolio',
@@ -29,6 +36,11 @@ export const translations = {
       'Un buen sitio web trabaja mientras tú duermes',
       'La primera impresión ya no es en persona',
       'La visibilidad se construye, no se improvisa',
+    ],
+    phrases: [
+      'Resultados que hablan solos',
+      'Cada pixel con propósito',
+      'Nosotros construimos, tú creces',
     ],
   },
   fr: {

@@ -34,6 +34,16 @@ export default function Contact() {
 
   return (
     <section className="contact" id="contact" ref={sectionRef}>
+
+      <div className="section-fade-top" />
+      <div className="section-fade-bottom" />
+
+      {/* ── Video background ── */}
+      <video className="ct-video" autoPlay muted loop playsInline>
+        <source src="/video-hero.mp4" type="video/mp4" />
+      </video>
+      <div className="ct-video-overlay" />
+
       <div className="ct-inner">
         <div className="ct-header">
           <div className="ct-tag-row">

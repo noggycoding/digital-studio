@@ -162,6 +162,39 @@
   transform-origin: left center;
 }
 
+/* ── Highlighted phrase banner ───────────────────────────── */
+.sv-phrase-banner {
+  display: flex;
+  align-items: center;
+  gap: 2.2rem;
+  margin-bottom: 4rem;
+  overflow: hidden;
+}
+
+.sv-phrase-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(255,255,255,0.14), transparent);
+  display: block;
+  flex-shrink: 0;
+}
+
+.sv-phrase-text {
+  font-size: clamp(1.8rem, 4vw, 3.4rem);
+  font-weight: 100;
+  font-style: italic;
+  letter-spacing: -0.02em;
+  color: rgba(255,255,255,0.62);
+  white-space: nowrap;
+  flex-shrink: 0;
+  line-height: 1.1;
+}
+
+@media (max-width: 768px) {
+  .sv-phrase-text { white-space: normal; text-align: center; font-size: clamp(1.4rem, 6vw, 2rem); }
+  .sv-phrase-line { display: none; }
+}
+
 /* ── Cards grid ──────────────────────────────────────────── */
 .sv-cards {
   display: grid;
