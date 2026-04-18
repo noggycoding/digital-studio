@@ -3,15 +3,14 @@ import { translations, LANGUAGES } from '../i18n/translations'
 
 const NAV_KEYS = ['services', 'portfolio', 'about', 'contact']
 
-export default function Navbar({ onLangChange, lang: externalLang }) {
-  const [lang, setLang]         = useState(externalLang || 'es')
+export default function Navbar({ onLangChange, lang = 'es' }) {
   const [langOpen, setLangOpen] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const dropRef = useRef(null)
 
-  const t           = translations[lang]
-  const currentLang = LANGUAGES.find(l => l.code === lang)
+  const t           = translations[lang] || translations.es
+  const currentLang = LANGUAGES.find(l => l.code === lang) || LANGUAGES[0]
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 60)
@@ -28,7 +27,6 @@ export default function Navbar({ onLangChange, lang: externalLang }) {
   }, [])
 
   const handleLangChange = (code) => {
-    setLang(code)
     setLangOpen(false)
     onLangChange?.(code)
   }

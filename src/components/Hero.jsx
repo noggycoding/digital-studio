@@ -7,13 +7,13 @@ import './Hero.css'
 
 gsap.registerPlugin(useGSAP)
 
-export default function Hero({ lang = 'es', onAnimKey }) {
-  const [animKey, setAnimKey] = useState(0)
-  const [motIdx, setMotIdx]   = useState(0)
-  const heroRef = useRef(null)
+export default function Hero({ lang = 'es' }) {
+  const [motIdx, setMotIdx] = useState(0)
+  const heroRef      = useRef(null)
+  const gsapRunCount = useRef(0)
 
-  const t           = translations[lang]
-  const currentLang = LANGUAGES.find(l => l.code === lang)
+  const t           = translations[lang] || translations.es
+  const currentLang = LANGUAGES.find(l => l.code === lang) || LANGUAGES[1]
 
   // RTL for Arabic
   useEffect(() => {
@@ -27,113 +27,67 @@ export default function Hero({ lang = 'es', onAnimKey }) {
     return () => clearInterval(id)
   }, [lang, t.motivations.length])
 
-  // ── GSAP entrance timeline ───────────────────────────────
+  // GSAP entrance timeline — re-runs on every lang change via dependency
   useGSAP(() => {
+    gsapRunCount.current += 1
     const ctx = gsap.context(() => {
-      const tl = gsap.timeline({ defaults: { ease: 'power3.out' }, delay: 2.2 })
+      // first run = initial page load, use longer delay to clear the page loader
+      const delay = gsapRunCount.current === 1 ? 2.2 : 0.2
+      const tl = gsap.timeline({ defaults: { ease: 'power3.out' }, delay })
 
-      tl.from('.nav-divider', { scaleX: 0, duration: 1, ease: 'power2.inOut' })
-        .from('.social-rail', { x: -14, opacity: 0, duration: 0.9 }, '-=0.6')
-        .from('.hero-brand-title', { y: 60, opacity: 0, duration: 1.2, ease: 'power3.out', letterSpacing: '0.02em' }, '-=0.4')
-        .from('.hero-eyebrow', { y: 20, opacity: 0, duration: 0.7 }, '-=0.5')
+      tl.from('.nav-divider',     { scaleX: 0, duration: 1, ease: 'power2.inOut' })
+        .from('.social-rail',     { x: -14, opacity: 0, duration: 0.9 }, '-=0.6')
+        .from('.hero-brand-title',{ y: 60, opacity: 0, duration: 1.2, letterSpacing: '0.02em' }, '-=0.4')
+        .from('.hero-eyebrow',    { y: 20, opacity: 0, duration: 0.7 }, '-=0.5')
 
       const charEls = gsap.utils.toArray('.hl-char')
       tl.from(charEls, {
-        y: '115%',
-        duration: 0.52,
+        y: '115%', duration: 0.52,
         stagger: { amount: 0.72, ease: 'power2.out' },
         ease: 'power3.out',
       }, '-=0.2')
-
-        .from('.btn-primary', { x: -16, opacity: 0, duration: 0.65 }, '-=0.1')
-        .from('.btn-ghost',   { x: -10, opacity: 0, duration: 0.65 }, '-=0.5')
+        .from('.btn-primary',      { x: -16, opacity: 0, duration: 0.65 }, '-=0.1')
+        .from('.btn-ghost',        { x: -10, opacity: 0, duration: 0.65 }, '-=0.5')
         .from('.sub-word', {
-          y: '100%',
-          duration: 0.42,
+          y: '100%', duration: 0.42,
           stagger: { amount: 0.38, ease: 'power2.out' },
           ease: 'power3.out',
         }, '-=0.9')
-        .from('.hero-stats',  { x: 18, opacity: 0, duration: 0.8 }, '-=0.4')
-        .from('.hero-badge',  { y: 10, opacity: 0, duration: 0.6 }, '-=0.5')
+        .from('.hero-stats',       { x: 18, opacity: 0, duration: 0.8 }, '-=0.4')
+        .from('.hero-badge',       { y: 10, opacity: 0, duration: 0.6 }, '-=0.5')
         .from('.scroll-indicator', { y: 10, opacity: 0, duration: 0.7 }, '-=0.4')
         .from('.hero-section-num', { opacity: 0, duration: 0.8 },        '-=0.5')
 
       gsap.to('.layer-light', {
         opacity: 0.7, duration: 4, yoyo: true, repeat: -1, ease: 'sine.inOut',
       })
-
-      gsap.utils.toArray('.hero-particle').forEach((p) => {
-        gsap.to(p, {
-          y: `random(-80, 80)`,
-          x: `random(-40, 40)`,
-          opacity: `random(0.1, 0.5)`,
-          duration: `random(4, 8)`,
-          repeat: -1,
-          yoyo: true,
-          ease: 'sine.inOut',
-          delay: `random(0, 3)`,
-        })
-      })
     }, heroRef)
 
     return () => ctx.revert()
-  }, { scope: heroRef, dependencies: [animKey] })
-
-  const handleLangChange = () => {
-    setAnimKey(k => k + 1)
-    setMotIdx(0)
-    onAnimKey?.()
-  }
-
-  const particles = Array.from({ length: 20 }, (_, i) => ({
-    id: i,
-    left: `${Math.random() * 100}%`,
-    top: `${Math.random() * 100}%`,
-    size: Math.random() * 3 + 1,
-    delay: Math.random() * 5,
-  }))
+  }, { scope: heroRef, dependencies: [lang] })
 
   return (
     <section className="hero" ref={heroRef} id="hero">
 
-      {/* ── Video ── */}
       <video className="hero-video" autoPlay muted loop playsInline>
         <source src="/clean_animation.mp4" type="video/mp4" />
       </video>
 
-      {/* ── Layers ── */}
       <div className="layer-overlay" />
       <div className="layer-light" />
       <div className="layer-vignette" />
       <div className="layer-noise" />
 
-      {/* ── Floating Particles ── */}
-      {particles.map(p => (
-        <div
-          key={p.id}
-          className="hero-particle"
-          style={{
-            left: p.left,
-            top: p.top,
-            width: p.size + 'px',
-            height: p.size + 'px',
-            animationDelay: p.delay + 's',
-          }}
-        />
-      ))}
-
       <div className="nav-divider" />
       <SocialRail />
 
-      {/* ── Brand title ── */}
       <div className="hero-brand">
-        <h1 className="hero-brand-title">FRAME STUDIO</h1>
+        <h1 className="hero-brand-title">FRAME <span className="hero-brand-studio">STUDIO</span></h1>
       </div>
 
-      {/* ── Two-column body ── */}
-      <div className="hero-body" key={animKey}>
+      {/* key={lang} remounts this subtree on language change so GSAP finds fresh elements */}
+      <div className="hero-body" key={lang}>
 
-        {/* Left — headline + CTAs */}
         <div className="hero-left">
           <span className="hero-eyebrow">{t.eyebrow}</span>
           <h1 className="hero-headline">
@@ -152,7 +106,7 @@ export default function Hero({ lang = 'es', onAnimKey }) {
             ))}
           </h1>
 
-          <p className="hero-slogan-sub">{t.slogan}</p>
+          {t.slogan && <p className="hero-slogan-sub">{t.slogan}</p>}
 
           <div className="hero-ctas">
             <a href="#portfolio" className="btn-primary">
@@ -168,7 +122,6 @@ export default function Hero({ lang = 'es', onAnimKey }) {
           </div>
         </div>
 
-        {/* Right — sub + stats + badge + phrase */}
         <div className="hero-right">
           <p className="hero-sub">
             {t.subheading.split(' ').map((word, i, arr) => (
@@ -205,16 +158,13 @@ export default function Hero({ lang = 'es', onAnimKey }) {
 
       </div>
 
-      {/* ── Section number ── */}
       <div className="hero-section-num">.01</div>
 
-      {/* ── Scroll indicator ── */}
       <div className="scroll-indicator">
         <span className="scroll-label">Scroll</span>
         <div className="scroll-track"><div className="scroll-thumb" /></div>
       </div>
 
-      {/* ── Bottom fade into Services ── */}
       <div className="hero-bottom-fade" />
 
     </section>

@@ -59,6 +59,13 @@ body {
   overflow-x: hidden;
 }
 
+/* Force GPU compositing layer on all background videos — prevents them from
+   triggering main-thread repaints while scrolling */
+video {
+  transform: translateZ(0);
+  will-change: transform;
+}
+
 ::selection {
   background: rgba(180, 210, 255, 0.2);
   color: #fff;

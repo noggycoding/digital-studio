@@ -1,6 +1,6 @@
+import { translations } from '../i18n/translations'
 import './Footer.css'
 
-const NAV_LINKS = ['Servicios', 'Portafolio', 'Nosotros', 'Contacto']
 const SOCIAL_LINKS = [
   { name: 'Instagram', href: '#' },
   { name: 'WhatsApp', href: '#' },
@@ -8,26 +8,32 @@ const SOCIAL_LINKS = [
   { name: 'X', href: '#' },
 ]
 
-export default function Footer() {
+export default function Footer({ lang = 'es' }) {
+  const t = translations[lang] || translations.es
+  const s = t.sections.footer
+  const navLinks = [
+    { label: t.nav.services, href: '#services' },
+    { label: t.nav.portfolio, href: '#portfolio' },
+    { label: t.nav.about,    href: '#about' },
+    { label: t.nav.contact,  href: '#contact' },
+  ]
+
   return (
     <footer className="footer">
       <div className="ft-inner">
-        {/* ── Top ── */}
         <div className="ft-top">
           <div className="ft-brand">
             <a href="#hero" className="ft-logo">
               FRAME<span className="ft-logo-accent"> STUDIO.</span>
             </a>
-            <p className="ft-tagline">
-              Creamos experiencias digitales<br />que mueven negocios.
-            </p>
+            <p className="ft-tagline">{s.tagline}</p>
           </div>
 
           <div className="ft-columns">
             <div className="ft-col">
-              <span className="ft-col-title">Navegación</span>
-              {NAV_LINKS.map(link => (
-                <a key={link} href={`#${link.toLowerCase()}`} className="ft-link">{link}</a>
+              <span className="ft-col-title">{s.nav}</span>
+              {navLinks.map(link => (
+                <a key={link.href} href={link.href} className="ft-link">{link.label}</a>
               ))}
             </div>
             <div className="ft-col">
@@ -41,15 +47,13 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* ── Divider ── */}
         <div className="ft-divider" />
 
-        {/* ── Bottom ── */}
         <div className="ft-bottom">
-          <span className="ft-copyright">© {new Date().getFullYear()} Frame Studio. Todos los derechos reservados.</span>
+          <span className="ft-copyright">© {new Date().getFullYear()} Frame Studio. {s.copyright}</span>
           <div className="ft-bottom-links">
-            <a href="#" className="ft-bottom-link">Política de privacidad</a>
-            <a href="#" className="ft-bottom-link">Términos</a>
+            <a href="#" className="ft-bottom-link">{s.privacy}</a>
+            <a href="#" className="ft-bottom-link">{s.terms}</a>
           </div>
         </div>
       </div>

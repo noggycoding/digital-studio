@@ -1,0 +1,43 @@
+.lang-flash {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  animation: lf-in-out 2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.lang-flash::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.72);
+  animation: lf-bg 2s ease forwards;
+}
+
+.lf-label {
+  position: relative;
+  font-family: var(--font-display);
+  font-size: clamp(2.8rem, 7vw, 7rem);
+  font-weight: 200;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #fff;
+  animation: lf-text 2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes lf-bg {
+  0%   { opacity: 0; }
+  15%  { opacity: 1; }
+  72%  { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@keyframes lf-text {
+  0%   { opacity: 0; transform: translateY(18px) scale(0.96); letter-spacing: 0.08em; }
+  18%  { opacity: 1; transform: translateY(0)    scale(1);    letter-spacing: 0.18em; }
+  72%  { opacity: 1; transform: translateY(0)    scale(1);    letter-spacing: 0.18em; }
+  100% { opacity: 0; transform: translateY(-8px) scale(1.02); }
+}

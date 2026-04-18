@@ -2,39 +2,43 @@ import { useRef, useState, useEffect } from 'react'
 import gsap from 'gsap'
 import { useGSAP } from '@gsap/react'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { translations } from '../i18n/translations'
 import './Portfolio.css'
 
 gsap.registerPlugin(ScrollTrigger, useGSAP)
 
-const PROJECTS = [
-  {
-    id: 1,
-    title: 'Ojo Rojo',
-    category: 'Sitio Web',
-    year: '2024',
-    url: 'https://ojorojo-mx.vercel.app/',
-    description: 'Sitio con identidad visual fuerte, diseño moderno y experiencia de usuario fluida.',
-  },
-  {
-    id: 2,
-    title: 'Yami House',
-    category: 'Sitio Web',
-    year: '2024',
-    url: 'https://yamihouse-mxl.netlify.app/',
-    description: 'Presencia digital con diseño limpio, navegación intuitiva y estética profesional.',
-  },
-  {
-    id: 3,
-    title: 'La Chopería',
-    category: 'Landing Page',
-    year: '2024',
-    url: 'https://la-choperia.vercel.app/#inicio',
-    description: 'Landing page de alto impacto con secciones bien definidas y llamadas a la acción claras.',
-  },
+const BASE_PROJECTS = [
+  { id: 1, title: 'Ojo Rojo',       year: '2024', url: 'https://ojorojo-mx.vercel.app/',               type: 'web' },
+  { id: 2, title: 'Yami House',     year: '2024', url: 'https://yamihouse-mxl.netlify.app/',            type: 'web' },
+  { id: 3, title: 'La Chopería',    year: '2024', url: 'https://la-choperia.vercel.app/#inicio',        type: 'landing' },
+  { id: 4, title: 'Perfect Salon',  year: '2025', url: 'https://v0-perfect-salon-website.vercel.app/', type: 'landing' },
 ]
 
-function PreviewFrame({ url, title }) {
+const DESCRIPTIONS = {
+  es: [
+    'Sitio con identidad visual fuerte, diseño moderno y experiencia de usuario fluida.',
+    'Presencia digital con diseño limpio, navegación intuitiva y estética profesional.',
+    'Landing page de alto impacto con secciones bien definidas y llamadas a la acción claras.',
+    'Sitio para salón de belleza con booking online, paleta elegante y diseño orientado a conversión.',
+  ],
+  en: [
+    'Strong visual identity, modern design and smooth user experience.',
+    'Digital presence with clean design, intuitive navigation and professional aesthetics.',
+    'High-impact landing page with well-defined sections and clear calls to action.',
+    'Beauty salon site with online booking, elegant palette and conversion-focused design.',
+  ],
+}
+
+function getDesc(lang, i) {
+  return (DESCRIPTIONS[lang] || DESCRIPTIONS.es)[i]
+}
+
+// Only mount iframe once section is near viewport — prevents 4 external sites
+// from loading on page init and causing scroll jank
+function PreviewFrame({ url, title, ready }) {
   const [blocked, setBlocked] = useState(false)
+
+  if (!ready) return <div className="pf-iframe-placeholder" />
 
   return blocked ? (
     <div className="pf-iframe-blocked">
@@ -45,27 +49,36 @@ function PreviewFrame({ url, title }) {
     </div>
   ) : (
     <iframe
-      src={url}
-      title={title}
-      className="pf-iframe"
-      loading="lazy"
+      src={url} title={title} className="pf-iframe"
       sandbox="allow-scripts allow-same-origin allow-forms"
       onError={() => setBlocked(true)}
     />
   )
 }
 
-export default function Portfolio() {
-  const sectionRef  = useRef(null)
-  const [active, setActive] = useState(null)
+export default function Portfolio({ lang = 'es' }) {
+  const sectionRef = useRef(null)
+  const [active, setActive]         = useState(null)
+  const [iframesReady, setIframesReady] = useState(false)
+  const s = (translations[lang] || translations.es).sections.portfolio
 
-  // lock body scroll when modal open
+  // Defer iframe mounting until section is near the viewport
+  useEffect(() => {
+    const el = sectionRef.current
+    if (!el) return
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) setIframesReady(true) },
+      { rootMargin: '400px' }
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
+
   useEffect(() => {
     document.body.style.overflow = active ? 'hidden' : ''
     return () => { document.body.style.overflow = '' }
   }, [active])
 
-  // close on Escape
   useEffect(() => {
     const handler = (e) => { if (e.key === 'Escape') setActive(null) }
     window.addEventListener('keydown', handler)
@@ -83,20 +96,44 @@ export default function Portfolio() {
         scrollTrigger: { trigger: '.pf-header', start: 'top 82%' },
         delay: 0.1,
       })
-      gsap.from('.portfolio-card', {
+
+      const cards = gsap.utils.toArray('.portfolio-card')
+      gsap.from(cards, {
         y: 80, opacity: 0, duration: 0.9, ease: 'power3.out',
         stagger: 0.15,
         scrollTrigger: { trigger: '.pf-grid', start: 'top 78%' },
+      })
+
+      // Pulse: runs only 2 cycles then stops — no perpetual repeat loop
+      const pulseTl = gsap.timeline({ paused: true })
+      const up   = { y: -10, scale: 1.022, duration: 0.6, ease: 'power3.out' }
+      const down = { y: 0, scale: 1, duration: 0.55, ease: 'power3.inOut', clearProps: 'transform' }
+
+      for (let cycle = 0; cycle < 2; cycle++) {
+        const base = cycle * cards.length
+        cards.forEach((card, i) => {
+          pulseTl.to(card, up, base + i)
+          if (i > 0) pulseTl.to(cards[i - 1], down, base + i)
+        })
+        pulseTl.to(cards[cards.length - 1], down, base + cards.length)
+      }
+      // After 2 cycles wait 12s then restart — use delayedCall instead of repeat:-1
+      pulseTl.call(() => {
+        gsap.delayedCall(12, () => pulseTl.restart())
+      })
+
+      ScrollTrigger.create({
+        trigger: '.pf-grid', start: 'top 72%', once: true,
+        onEnter: () => pulseTl.play(),
       })
     }, sectionRef)
     return () => ctx.revert()
   }, { scope: sectionRef })
 
-  const openProject = PROJECTS.find(p => p.id === active)
+  const openProject = BASE_PROJECTS.find(p => p.id === active)
 
   return (
     <section className="portfolio" id="portfolio" ref={sectionRef}>
-
       <div className="section-fade-top" />
       <div className="section-fade-bottom" />
 
@@ -109,54 +146,48 @@ export default function Portfolio() {
         <div className="pf-header">
           <div className="pf-tag-row">
             <span className="pf-section-num">.03</span>
-            <span className="pf-section-label">Portafolio</span>
+            <span className="pf-section-label">{s.label}</span>
           </div>
           <h2 className="pf-title">
-            Proyectos que <br />
-            <em className="pf-title-em">hablan por sí solos</em>
+            {s.title[0]}<br />
+            <em className="pf-title-em">{s.title[1]}</em>
           </h2>
         </div>
 
         <div className="pf-grid">
-          {PROJECTS.map((project) => (
+          {BASE_PROJECTS.map((project, i) => (
             <div className="portfolio-card" key={project.id}>
-
-              {/* Live preview iframe */}
               <div className="pf-card-visual">
                 <div className="pf-iframe-wrap">
-                  <PreviewFrame url={project.url} title={project.title} />
+                  <PreviewFrame url={project.url} title={project.title} ready={iframesReady} />
                 </div>
                 <div className="pf-card-overlay" />
                 <span className="pf-card-year">{project.year}</span>
-
-                {/* Hover actions */}
                 <div className="pf-card-actions">
                   <button className="pf-action-btn pf-action-expand" onClick={() => setActive(project.id)}>
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M8 3H5a2 2 0 00-2 2v3m18 0V5a2 2 0 00-2-2h-3m0 18h3a2 2 0 002-2v-3M3 16v3a2 2 0 002 2h3" />
                     </svg>
-                    Ver sitio
+                    {s.viewSite}
                   </button>
                   <a className="pf-action-btn pf-action-external" href={project.url} target="_blank" rel="noopener noreferrer">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3" />
                     </svg>
-                    Nueva pestaña
+                    {s.newTab}
                   </a>
                 </div>
               </div>
-
               <div className="pf-card-info">
-                <span className="pf-card-cat">{project.category}</span>
+                <span className="pf-card-cat">{s.categories[project.type]}</span>
                 <h3 className="pf-card-title">{project.title}</h3>
-                <p className="pf-card-desc">{project.description}</p>
+                <p className="pf-card-desc">{getDesc(lang, i)}</p>
               </div>
             </div>
           ))}
         </div>
       </div>
 
-      {/* ── Full-screen site viewer modal ── */}
       {active && (
         <div className="pf-modal" onClick={(e) => e.target === e.currentTarget && setActive(null)}>
           <div className="pf-modal-inner">
@@ -181,8 +212,7 @@ export default function Portfolio() {
               </div>
             </div>
             <iframe
-              src={openProject?.url}
-              title={openProject?.title}
+              src={openProject?.url} title={openProject?.title}
               className="pf-modal-iframe"
               sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
             />
