@@ -213,25 +213,27 @@
   transition: opacity 0.4s ease;
 }
 
-/* Shimmer sweep across top border */
+/* Shimmer sweep — uses translateX (GPU compositor, no layout recalc) */
 .ab-value::after {
   content: '';
   position: absolute;
   top: -1px;
-  left: -80%;
+  left: 0;
   width: 55%;
   height: 2px;
   background: linear-gradient(90deg, transparent, rgba(255,255,255,0.7), transparent);
+  transform: translateX(-200%);
   animation: ab-shimmer 5s ease-in-out infinite;
   pointer-events: none;
+  will-change: transform;
 }
 
 .ab-value:nth-child(2)::after { animation-delay: -1.65s; }
 .ab-value:nth-child(3)::after { animation-delay: -3.3s; }
 
 @keyframes ab-shimmer {
-  0%   { left: -80%; }
-  100% { left: 160%; }
+  0%   { transform: translateX(-200%); }
+  100% { transform: translateX(400%); }
 }
 
 .ab-value:hover {

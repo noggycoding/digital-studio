@@ -1,17 +1,20 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, Suspense, lazy } from 'react'
 import Lenis from 'lenis'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
-import Services from './components/Services'
-import Portfolio from './components/Portfolio'
-import About from './components/About'
-import QuoteBanner from './components/QuoteBanner'
-import Contact from './components/Contact'
-import Footer from './components/Footer'
 import CustomCursor from './components/CustomCursor'
 import PageLoader from './components/PageLoader'
-import LangFlash from './components/LangFlash'
-import ChatBot from './components/ChatBot'
+import SectionSkeleton from './components/SectionSkeleton'
+
+// Lazy load below-the-fold components
+const Services = lazy(() => import('./components/Services'))
+const Portfolio = lazy(() => import('./components/Portfolio'))
+const About = lazy(() => import('./components/About'))
+const QuoteBanner = lazy(() => import('./components/QuoteBanner'))
+const Contact = lazy(() => import('./components/Contact'))
+const Footer = lazy(() => import('./components/Footer'))
+const LangFlash = lazy(() => import('./components/LangFlash'))
+const ChatBot = lazy(() => import('./components/ChatBot'))
 
 export default function App() {
   const [loaded, setLoaded]       = useState(false)
@@ -40,9 +43,29 @@ export default function App() {
 
     const timer = setTimeout(() => setLoaded(true), 2200)
 
+    // Pause background videos when they leave viewport — 5 simultaneous
+    // autoplay videos crush CPU/GPU. Each section's video now only plays
+    // while that section is actually visible.
+    const videoObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(({ target, isIntersecting }) => {
+          if (isIntersecting) target.play().catch(() => {})
+          else target.pause()
+        })
+      },
+      { threshold: 0.05 }
+    )
+    const watchVideos = () => {
+      document.querySelectorAll('video[autoplay]').forEach(v => videoObserver.observe(v))
+    }
+    // Wait for lazy sections to mount before observing
+    const vidTimer = setTimeout(watchVideos, 3000)
+
     return () => {
       lenis.destroy()
       clearTimeout(timer)
+      clearTimeout(vidTimer)
+      videoObserver.disconnect()
     }
   }, [])
 
@@ -50,17 +73,35 @@ export default function App() {
     <>
       <PageLoader loaded={loaded} />
       <CustomCursor />
-      <LangFlash lang={flashLang.current} flashKey={flashKey} />
+      <Suspense fallback={null}>
+        <LangFlash lang={flashLang.current} flashKey={flashKey} />
+      </Suspense>
       <Navbar lang={lang} onLangChange={handleLangChange} />
-      <ChatBot lang={lang} />
+      
+      <Suspense fallback={null}>
+        <ChatBot lang={lang} />
+      </Suspense>
+
       <main>
         <Hero lang={lang} />
-        <Services lang={lang} />
-        <Portfolio lang={lang} />
-        <QuoteBanner lang={lang} />
-        <About lang={lang} />
-        <Contact lang={lang} />
-        <Footer lang={lang} />
+        <Suspense fallback={<SectionSkeleton />}>
+          <Services lang={lang} />
+        </Suspense>
+        <Suspense fallback={<SectionSkeleton />}>
+          <Portfolio lang={lang} />
+        </Suspense>
+        <Suspense fallback={<SectionSkeleton />}>
+          <QuoteBanner lang={lang} />
+        </Suspense>
+        <Suspense fallback={<SectionSkeleton />}>
+          <About lang={lang} />
+        </Suspense>
+        <Suspense fallback={<SectionSkeleton />}>
+          <Contact lang={lang} />
+        </Suspense>
+        <Suspense fallback={<SectionSkeleton />}>
+          <Footer lang={lang} />
+        </Suspense>
       </main>
     </>
   )

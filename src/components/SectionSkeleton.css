@@ -1,0 +1,131 @@
+.section-skeleton {
+  width: 100%;
+  padding: var(--section-pad) 0;
+  background: var(--bg-primary);
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.section-skeleton::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at 50% 50%, var(--bg-secondary) 0%, transparent 70%);
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.skeleton-container {
+  width: 100%;
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: 0 var(--side-pad);
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  position: relative;
+  z-index: 1;
+}
+
+/* GPU-safe pulse: animates opacity, not background-color */
+@keyframes skeletonPulse {
+  0%, 100% { opacity: 0.4; }
+  50%       { opacity: 0.7; }
+}
+
+.skeleton-title {
+  width: 40%;
+  height: 48px;
+  background: var(--dark-gray);
+  border-radius: 4px;
+  animation: skeletonPulse 1.8s ease-in-out infinite;
+  margin-bottom: 1rem;
+  will-change: opacity;
+}
+
+.skeleton-subtitle {
+  width: 25%;
+  height: 24px;
+  background: var(--dark-gray);
+  border-radius: 4px;
+  animation: skeletonPulse 1.8s ease-in-out infinite 0.2s;
+  will-change: opacity;
+}
+
+.skeleton-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.skeleton-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Shimmer uses translateX — GPU-composited, no layout recalc */
+.skeleton-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.04) 50%,
+    transparent 100%
+  );
+  transform: translateX(-100%) skewX(-20deg);
+  animation: skeletonShimmer 2.5s ease-in-out infinite;
+  will-change: transform;
+}
+
+@keyframes skeletonShimmer {
+  0%   { transform: translateX(-100%) skewX(-20deg); }
+  100% { transform: translateX(200%)  skewX(-20deg); }
+}
+
+.skeleton-img {
+  width: 100%;
+  height: 200px;
+  background: var(--dark-gray);
+  border-radius: 8px;
+  animation: skeletonPulse 1.8s ease-in-out infinite 0.3s;
+  will-change: opacity;
+}
+
+.skeleton-text {
+  height: 16px;
+  background: var(--dark-gray);
+  border-radius: 4px;
+}
+
+.skeleton-text-1 {
+  width: 80%;
+  animation: skeletonPulse 1.8s ease-in-out infinite 0.4s;
+  will-change: opacity;
+}
+
+.skeleton-text-2 {
+  width: 60%;
+  animation: skeletonPulse 1.8s ease-in-out infinite 0.5s;
+  will-change: opacity;
+}
+
+@media (max-width: 768px) {
+  .skeleton-title  { width: 70%; }
+  .skeleton-subtitle { width: 50%; }
+}

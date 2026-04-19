@@ -130,7 +130,15 @@
 .pf-iframe-placeholder {
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%);
+  background: var(--dark-gray);
+  opacity: 0.5;
+  animation: pfSkeletonPulse 1.8s ease-in-out infinite;
+  will-change: opacity;
+}
+
+@keyframes pfSkeletonPulse {
+  0%, 100% { opacity: 0.35; }
+  50%       { opacity: 0.6; }
 }
 
 /* Fallback when iframe is blocked */
