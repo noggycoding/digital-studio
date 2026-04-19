@@ -33,12 +33,21 @@ function getDesc(lang, i) {
   return (DESCRIPTIONS[lang] || DESCRIPTIONS.es)[i]
 }
 
-// Only mount iframe once section is near viewport — prevents 4 external sites
-// from loading on page init and causing scroll jank
-function PreviewFrame({ url, title, ready }) {
+// Only mount iframe once section is near viewport, and stagger them
+// to prevent massive main-thread blocking that causes scroll jank
+function PreviewFrame({ url, title, ready, index }) {
   const [blocked, setBlocked] = useState(false)
+  const [shouldLoad, setShouldLoad] = useState(false)
 
-  if (!ready) return <div className="pf-iframe-placeholder" />
+  useEffect(() => {
+    if (ready) {
+      // Stagger iframe loads by 600ms each so they don't freeze the page
+      const timer = setTimeout(() => setShouldLoad(true), index * 600)
+      return () => clearTimeout(timer)
+    }
+  }, [ready, index])
+
+  if (!shouldLoad) return <div className="pf-iframe-placeholder" />
 
   return blocked ? (
     <div className="pf-iframe-blocked">
@@ -50,6 +59,7 @@ function PreviewFrame({ url, title, ready }) {
   ) : (
     <iframe
       src={url} title={title} className="pf-iframe"
+      loading="lazy"
       sandbox="allow-scripts allow-same-origin allow-forms"
       onError={() => setBlocked(true)}
     />
@@ -159,7 +169,7 @@ export default function Portfolio({ lang = 'es' }) {
             <div className="portfolio-card" key={project.id}>
               <div className="pf-card-visual">
                 <div className="pf-iframe-wrap">
-                  <PreviewFrame url={project.url} title={project.title} ready={iframesReady} />
+                  <PreviewFrame url={project.url} title={project.title} ready={iframesReady} index={i} />
                 </div>
                 <div className="pf-card-overlay" />
                 <span className="pf-card-year">{project.year}</span>
