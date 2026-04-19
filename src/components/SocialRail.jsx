@@ -142,7 +142,7 @@ export default function SocialRail() {
   return (
     <div className="social-rail">
       {LINKS.map(({ Icon, href, label }) => (
-        <a key={label} href={href} className="s-item" aria-label={label}
+        <a key={href} href={href} className="s-item" aria-label={label}
            target={href.startsWith('http') ? '_blank' : undefined}
            rel={href.startsWith('http') ? 'noopener noreferrer' : undefined}>
           <Icon />
