@@ -1,0 +1,1 @@
+import{j as n}from"./index-1ce0d8b1.js";const o={en:"English Mode",es:"Modo Español",fr:"Mode Français",pt:"Modo Português",zh:"中文模式",ar:"الوضع العربي",ru:"Русский Режим",hi:"हिंदी मोड"};function e({lang:s,flashKey:a}){return!s||a===0?null:n.jsx("div",{className:"lang-flash",children:n.jsx("span",{className:"lf-label",children:o[s]||s})},a)}export{e as default};
