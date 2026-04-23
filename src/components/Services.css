@@ -112,21 +112,24 @@
 }
 
 .sv-section-num {
+  font-family: var(--font-heading);
   font-size: 0.7rem;
   font-weight: 500;
-  letter-spacing: 0.18em;
-  color: rgba(255,255,255,0.28);
+  letter-spacing: 0.2em;
+  color: rgba(255,255,255,0.45);
 }
 
 .sv-section-label {
-  font-size: 0.68rem;
+  font-family: var(--font-heading);
+  font-size: 0.66rem;
   font-weight: 500;
-  letter-spacing: 0.22em;
+  letter-spacing: 0.24em;
   text-transform: uppercase;
-  color: rgba(255,255,255,0.25);
+  color: rgba(221,232,255,0.75);
 }
 
 .sv-title {
+  font-family: var(--font-body);
   font-size: clamp(2.4rem, 5.5vw, 4.2rem);
   font-weight: 200;
   line-height: 1.08;
@@ -135,16 +138,17 @@
 }
 
 .sv-title-em {
+  font-family: var(--font-display);
   font-style: italic;
-  font-weight: 200;
-  color: rgba(255,255,255,0.55);
+  font-weight: 400;
+  color: rgba(221,232,255,0.75);
 }
 
 .sv-desc {
   font-size: 0.9rem;
   font-weight: 300;
-  line-height: 1.75;
-  color: rgba(255,255,255,0.42);
+  line-height: 1.7;
+  color: rgba(255,255,255,0.65);
   max-width: 360px;
   align-self: end;
 }
@@ -320,28 +324,30 @@
 }
 
 .sv-card-title {
+  font-family: var(--font-body);
   font-size: 1.5rem;
-  font-weight: 300;
+  font-weight: 400;
   letter-spacing: -0.015em;
-  color: rgba(255,255,255,0.92);
+  color: #fff;
   line-height: 1.12;
 }
 
 .sv-card-accent {
+  font-family: var(--font-display);
   font-size: 1.5rem;
-  font-weight: 200;
+  font-weight: 400;
   font-style: italic;
   letter-spacing: -0.015em;
-  color: rgba(255,255,255,0.3);
+  color: rgba(221,232,255,0.55);
   line-height: 1.12;
   margin-bottom: 1rem;
 }
 
 .sv-card-desc {
-  font-size: 0.81rem;
+  font-size: 0.84rem;
   font-weight: 300;
   line-height: 1.7;
-  color: rgba(255,255,255,0.38);
+  color: rgba(255,255,255,0.6);
 }
 
 /* ── Card footer ─────────────────────────────────────────── */
@@ -459,5 +465,7 @@
 @media (max-width: 520px) {
   .sv-inner { padding: 0 1.4rem; }
   .sv-title { font-size: clamp(2rem, 9vw, 2.6rem); }
-  .sv-card-body { padding: 1.5rem; }
+  .sv-card-body { padding: 1.2rem; }
+  .sv-header { gap: 1rem; }
+  .sv-cta { width: 100%; justify-content: center; }
 }

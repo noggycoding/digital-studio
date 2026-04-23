@@ -1,6 +1,8 @@
 export const translations = {
   en: {
     eyebrow: 'Digital Studio',
+    motto: 'A foolish man blames, a wise man learns',
+    heroTitle: 'We Scale Your Business',
     slogan: 'Your business, smarter than ever',
     headline: ['We Build', 'Digital', 'Experiences'],
     subheading: 'Web design, automation & social media for modern businesses',
@@ -120,6 +122,8 @@ export const translations = {
   },
   es: {
     eyebrow: 'Estudio Digital',
+    motto: 'El necio culpa, el sabio aprende',
+    heroTitle: 'Escalamos tu Negocio',
     slogan: 'Tu negocio más inteligente que nunca',
     headline: ['Creamos', 'Experiencias', 'Digitales'],
     subheading: 'Diseño web, automatización y redes sociales para negocios modernos',

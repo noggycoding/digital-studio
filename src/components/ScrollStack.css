@@ -1,0 +1,29 @@
+.scroll-stack-scroller {
+  position: relative;
+  width: 100%;
+  /* No internal scroll — we use window scroll. No overflow containment
+     that would introduce a horizontal scrollbar when cards scale. */
+  overflow: visible;
+}
+
+.scroll-stack-inner {
+  padding: 2vh 0 6rem;
+  position: relative;
+  overflow: visible;
+}
+
+.scroll-stack-card {
+  transform-origin: top center;
+  will-change: transform, filter;
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+  width: 100%;
+  box-sizing: border-box;
+  transform: translateZ(0);
+  position: relative;
+}
+
+.scroll-stack-end {
+  width: 100%;
+  height: 1px;
+}

@@ -31,47 +31,18 @@ const ICONS = [
   ),
 ]
 
+const CARD_AOS = ['zoom-out-right', 'fade-up', 'zoom-out-left']
+
 export default function Services({ lang = 'es' }) {
   const sectionRef = useRef(null)
   const s = (translations[lang] || translations.es).sections.services
 
   useGSAP(() => {
     const ctx = gsap.context(() => {
-      gsap.from('.sv-tag-row', {
-        x: -80, opacity: 0, duration: 1.0, ease: 'power3.out',
-        scrollTrigger: { trigger: '.sv-header', start: 'top 82%' },
-      })
-      gsap.from('.sv-title', {
-        x: -100, opacity: 0, duration: 1.1, ease: 'power3.out',
-        scrollTrigger: { trigger: '.sv-header', start: 'top 82%' },
-        delay: 0.12,
-      })
-      gsap.from('.sv-desc', {
-        x: 80, opacity: 0, duration: 1.0, ease: 'power3.out',
-        scrollTrigger: { trigger: '.sv-header', start: 'top 82%' },
-        delay: 0.22,
-      })
       gsap.from('.sv-divider', {
-        scaleX: 0, duration: 1.4, ease: 'power2.inOut',
+        scaleX: 0, duration: 1.6, ease: 'expo.inOut',
         transformOrigin: 'left center',
         scrollTrigger: { trigger: '.sv-divider', start: 'top 90%' },
-      })
-      gsap.from('.sv-card', {
-        y: 80, opacity: 0, duration: 0.9, ease: 'power3.out',
-        stagger: { amount: 0.5 },
-        scrollTrigger: { trigger: '.sv-cards', start: 'top 78%' },
-      })
-      gsap.from('.sv-card-num', {
-        x: 30, opacity: 0, duration: 0.7, ease: 'power3.out',
-        stagger: { amount: 0.4 },
-        scrollTrigger: { trigger: '.sv-cards', start: 'top 78%' },
-        delay: 0.35,
-      })
-      gsap.from('.sv-tag-pill', {
-        x: -20, opacity: 0, duration: 0.6, ease: 'power2.out',
-        stagger: { amount: 0.6 },
-        scrollTrigger: { trigger: '.sv-cards', start: 'top 70%' },
-        delay: 0.5,
       })
       gsap.fromTo('.sv-video',
         { y: 140 },
@@ -109,33 +80,36 @@ export default function Services({ lang = 'es' }) {
       <div className="sv-inner">
         <div className="sv-header">
           <div className="sv-header-left">
-            <div className="sv-tag-row">
+            <div className="sv-tag-row" data-aos="fade-right">
               <span className="sv-section-num">.02</span>
               <span className="sv-section-label">{s.label}</span>
             </div>
-            <h2 className="sv-title">
+            <h2 className="sv-title" data-aos="fade-right" data-aos-delay="150" data-aos-duration="1000">
               {s.title[0]}<br />
               <em className="sv-title-em">{s.title[1]}</em>
             </h2>
           </div>
-          <p className="sv-desc">{s.desc}</p>
+          <p className="sv-desc" data-aos="fade-left" data-aos-delay="250">{s.desc}</p>
         </div>
 
         <div className="sv-divider" />
 
         <div className="sv-phrase-banner">
-          <span className="sv-phrase-line" aria-hidden="true">—</span>
-          <p className="sv-phrase-text">{s.phrase}</p>
-          <span className="sv-phrase-line" aria-hidden="true">—</span>
+          <p className="sv-phrase-text" data-aos="zoom-out-left" data-aos-duration="1000">{s.phrase}</p>
         </div>
 
         <div className="sv-cards">
           {s.cards.map((card, i) => (
-            <div className="sv-card" key={i}>
+            <div
+              className="sv-card" key={i}
+              data-aos={CARD_AOS[i]}
+              data-aos-delay={i * 130}
+              data-aos-duration="900"
+            >
               <div className="sv-card-bloom" />
               <div className="sv-card-body">
                 <div className="sv-card-top">
-                  <span className="sv-card-num">0{i + 1}</span>
+                  <span className="sv-card-num" data-aos="fade-down" data-aos-delay={i * 130 + 200}>0{i + 1}</span>
                   <div className={`sv-card-icon float-slow float-d${(i % 3) + 1}`}>{ICONS[i]}</div>
                 </div>
                 <div className="sv-card-content">
@@ -145,8 +119,8 @@ export default function Services({ lang = 'es' }) {
                 </div>
                 <div className="sv-card-foot">
                   <div className="sv-tags">
-                    {TAGS[i].map(tag => (
-                      <span className="sv-tag-pill" key={tag}>{tag}</span>
+                    {TAGS[i].map((tag, j) => (
+                      <span className="sv-tag-pill" key={tag} data-aos="fade-up" data-aos-delay={i * 130 + j * 80 + 300}>{tag}</span>
                     ))}
                   </div>
                   <a href="#contact" className="sv-card-cta">

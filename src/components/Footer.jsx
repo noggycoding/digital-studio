@@ -2,10 +2,10 @@ import { translations } from '../i18n/translations'
 import './Footer.css'
 
 const SOCIAL_LINKS = [
-  { name: 'Instagram', href: '#' },
-  { name: 'WhatsApp', href: '#' },
-  { name: 'Facebook', href: '#' },
-  { name: 'X', href: '#' },
+  { name: 'Instagram', href: 'https://www.instagram.com/framestudio.devv?igsh=NGdjZWU5MTM1MG1z&utm_source=qr' },
+  { name: 'WhatsApp',  href: 'https://wa.me/16864281021' },
+  { name: 'Facebook',  href: 'https://facebook.com/framestudio.devv' },
+  { name: 'X',         href: 'https://x.com/framestudio_dev' },
 ]
 
 export default function Footer({ lang = 'es' }) {
@@ -24,7 +24,7 @@ export default function Footer({ lang = 'es' }) {
         <div className="ft-top">
           <div className="ft-brand">
             <a href="#hero" className="ft-logo">
-              FRAME<span className="ft-logo-accent"> STUDIO.</span>
+              <img src="/logocomplete.png" alt="Frame Studio" className="ft-logo-img" loading="lazy" decoding="async" />
             </a>
             <p className="ft-tagline">{s.tagline}</p>
           </div>

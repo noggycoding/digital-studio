@@ -106,7 +106,7 @@ export default function About({ lang = 'es' }) {
       <div className="section-fade-bottom" />
 
       <video className="ab-video" autoPlay muted loop playsInline>
-        <source src="/robot.mp4" type="video/mp4" />
+        <source src="/cube.mp4" type="video/mp4" />
       </video>
       <div className="ab-video-overlay" />
 

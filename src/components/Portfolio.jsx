@@ -3,15 +3,16 @@ import gsap from 'gsap'
 import { useGSAP } from '@gsap/react'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { translations } from '../i18n/translations'
+import ScrollStack, { ScrollStackItem } from './ScrollStack'
 import './Portfolio.css'
 
 gsap.registerPlugin(ScrollTrigger, useGSAP)
 
 const BASE_PROJECTS = [
-  { id: 1, title: 'Ojo Rojo',       year: '2024', url: 'https://ojorojo-mx.vercel.app/',               type: 'web' },
-  { id: 2, title: 'Yami House',     year: '2024', url: 'https://yamihouse-mxl.netlify.app/',            type: 'web' },
-  { id: 3, title: 'La Chopería',    year: '2024', url: 'https://la-choperia.vercel.app/#inicio',        type: 'landing' },
-  { id: 4, title: 'Perfect Salon',  year: '2025', url: 'https://v0-perfect-salon-website.vercel.app/', type: 'landing' },
+  { id: 1, title: 'Ojo Rojo',      year: '2024', url: 'https://ojorojo-mx.vercel.app/',               type: 'web',     color: '#7a1515', image: '/ojorojo.png' },
+  { id: 2, title: 'Yami House',    year: '2024', url: 'https://yamihouse-mxl.netlify.app/',            type: 'web',     color: '#1a3d66', image: '/yamihouse.png' },
+  { id: 3, title: 'La Chopería',   year: '2024', url: 'https://la-choperia.vercel.app/#inicio',        type: 'landing', color: '#1e4d1e', image: '/lachope.png' },
+  { id: 4, title: 'Perfect Salon', year: '2025', url: 'https://v0-perfect-salon-website.vercel.app/', type: 'landing', color: '#4a3510', image: '/perfectsalon.png' },
 ]
 
 const DESCRIPTIONS = {
@@ -33,56 +34,28 @@ function getDesc(lang, i) {
   return (DESCRIPTIONS[lang] || DESCRIPTIONS.es)[i]
 }
 
-// Only mount iframe once section is near viewport, and stagger them
-// to prevent massive main-thread blocking that causes scroll jank
-function PreviewFrame({ url, title, ready, index }) {
-  const [blocked, setBlocked] = useState(false)
-  const [shouldLoad, setShouldLoad] = useState(false)
-
-  useEffect(() => {
-    if (ready) {
-      // Stagger iframe loads by 600ms each so they don't freeze the page
-      const timer = setTimeout(() => setShouldLoad(true), index * 600)
-      return () => clearTimeout(timer)
-    }
-  }, [ready, index])
-
-  if (!shouldLoad) return <div className="pf-iframe-placeholder" />
-
-  return blocked ? (
-    <div className="pf-iframe-blocked">
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" opacity="0.3">
-        <circle cx="12" cy="12" r="10" /><path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20" />
-      </svg>
-      <span>{title}</span>
+function ProjectImage({ title, image }) {
+  const [loaded, setLoaded] = useState(false)
+  return (
+    <div className="pf-stack-img-wrap">
+      {!loaded && <div className="pf-img-skeleton" />}
+      <img
+        src={image}
+        alt={title}
+        className={`pf-stack-img${loaded ? ' pf-stack-img--loaded' : ''}`}
+        loading="lazy"
+        decoding="async"
+        onLoad={() => setLoaded(true)}
+      />
     </div>
-  ) : (
-    <iframe
-      src={url} title={title} className="pf-iframe"
-      loading="lazy"
-      sandbox="allow-scripts allow-same-origin allow-forms"
-      onError={() => setBlocked(true)}
-    />
   )
 }
 
 export default function Portfolio({ lang = 'es' }) {
   const sectionRef = useRef(null)
   const [active, setActive]         = useState(null)
-  const [iframesReady, setIframesReady] = useState(false)
+  const [iframeLoaded, setIframeLoaded] = useState(false)
   const s = (translations[lang] || translations.es).sections.portfolio
-
-  // Defer iframe mounting until section is near the viewport
-  useEffect(() => {
-    const el = sectionRef.current
-    if (!el) return
-    const observer = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) setIframesReady(true) },
-      { rootMargin: '400px' }
-    )
-    observer.observe(el)
-    return () => observer.disconnect()
-  }, [])
 
   useEffect(() => {
     document.body.style.overflow = active ? 'hidden' : ''
@@ -90,55 +63,12 @@ export default function Portfolio({ lang = 'es' }) {
   }, [active])
 
   useEffect(() => {
-    const handler = (e) => { if (e.key === 'Escape') setActive(null) }
+    const handler = e => { if (e.key === 'Escape') setActive(null) }
     window.addEventListener('keydown', handler)
     return () => window.removeEventListener('keydown', handler)
   }, [])
 
-  useGSAP(() => {
-    const ctx = gsap.context(() => {
-      gsap.from('.pf-tag-row', {
-        y: 30, opacity: 0, duration: 0.8,
-        scrollTrigger: { trigger: '.pf-header', start: 'top 82%' },
-      })
-      gsap.from('.pf-title', {
-        y: 50, opacity: 0, duration: 1,
-        scrollTrigger: { trigger: '.pf-header', start: 'top 82%' },
-        delay: 0.1,
-      })
-
-      const cards = gsap.utils.toArray('.portfolio-card')
-      gsap.from(cards, {
-        y: 80, opacity: 0, duration: 0.9, ease: 'power3.out',
-        stagger: 0.15,
-        scrollTrigger: { trigger: '.pf-grid', start: 'top 78%' },
-      })
-
-      // Pulse: runs only 2 cycles then stops — no perpetual repeat loop
-      const pulseTl = gsap.timeline({ paused: true })
-      const up   = { y: -10, scale: 1.022, duration: 0.6, ease: 'power3.out' }
-      const down = { y: 0, scale: 1, duration: 0.55, ease: 'power3.inOut', clearProps: 'transform' }
-
-      for (let cycle = 0; cycle < 2; cycle++) {
-        const base = cycle * cards.length
-        cards.forEach((card, i) => {
-          pulseTl.to(card, up, base + i)
-          if (i > 0) pulseTl.to(cards[i - 1], down, base + i)
-        })
-        pulseTl.to(cards[cards.length - 1], down, base + cards.length)
-      }
-      // After 2 cycles wait 12s then restart — use delayedCall instead of repeat:-1
-      pulseTl.call(() => {
-        gsap.delayedCall(12, () => pulseTl.restart())
-      })
-
-      ScrollTrigger.create({
-        trigger: '.pf-grid', start: 'top 72%', once: true,
-        onEnter: () => pulseTl.play(),
-      })
-    }, sectionRef)
-    return () => ctx.revert()
-  }, { scope: sectionRef })
+  useEffect(() => { setIframeLoaded(false) }, [active])
 
   const openProject = BASE_PROJECTS.find(p => p.id === active)
 
@@ -154,52 +84,66 @@ export default function Portfolio({ lang = 'es' }) {
 
       <div className="pf-inner">
         <div className="pf-header">
-          <div className="pf-tag-row">
+          <div className="pf-tag-row" data-aos="fade-right">
             <span className="pf-section-num">.03</span>
             <span className="pf-section-label">{s.label}</span>
           </div>
-          <h2 className="pf-title">
+          <h2 className="pf-title" data-aos="fade-right" data-aos-delay="150" data-aos-duration="1000">
             {s.title[0]}<br />
             <em className="pf-title-em">{s.title[1]}</em>
           </h2>
         </div>
 
-        <div className="pf-grid">
+        <ScrollStack
+          itemDistance={50}
+          itemScale={0.035}
+          itemStackDistance={22}
+          stackPosition="22%"
+          scaleEndPosition="10%"
+          baseScale={0.9}
+          blurAmount={2.5}
+        >
           {BASE_PROJECTS.map((project, i) => (
-            <div className="portfolio-card" key={project.id}>
-              <div className="pf-card-visual">
-                <div className="pf-iframe-wrap">
-                  <PreviewFrame url={project.url} title={project.title} ready={iframesReady} index={i} />
+            <ScrollStackItem key={project.id}>
+              <div className="pf-stack-card" data-aos="fade-up" data-aos-delay={i * 100} data-aos-duration="800">
+                {/* Left: info */}
+                <div className="pf-stack-info">
+                  <div className="pf-stack-meta">
+                    <span className="pf-stack-num">0{i + 1}</span>
+                    <span className="pf-stack-cat">{s.categories[project.type]}</span>
+                    <span className="pf-stack-year">{project.year}</span>
+                  </div>
+                  <h3 className="pf-stack-title">{project.title}</h3>
+                  <p className="pf-stack-desc">{getDesc(lang, i)}</p>
+                  <div className="pf-stack-actions">
+                    <button className="pf-action-btn pf-action-expand" onClick={() => setActive(project.id)}>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M8 3H5a2 2 0 00-2 2v3m18 0V5a2 2 0 00-2-2h-3m0 18h3a2 2 0 002-2v-3M3 16v3a2 2 0 002 2h3" />
+                      </svg>
+                      {s.viewSite}
+                    </button>
+                    <a className="pf-action-btn pf-action-external" href={project.url} target="_blank" rel="noopener noreferrer">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3" />
+                      </svg>
+                      {s.newTab}
+                    </a>
+                  </div>
                 </div>
-                <div className="pf-card-overlay" />
-                <span className="pf-card-year">{project.year}</span>
-                <div className="pf-card-actions">
-                  <button className="pf-action-btn pf-action-expand" onClick={() => setActive(project.id)}>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M8 3H5a2 2 0 00-2 2v3m18 0V5a2 2 0 00-2-2h-3m0 18h3a2 2 0 002-2v-3M3 16v3a2 2 0 002 2h3" />
-                    </svg>
-                    {s.viewSite}
-                  </button>
-                  <a className="pf-action-btn pf-action-external" href={project.url} target="_blank" rel="noopener noreferrer">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3" />
-                    </svg>
-                    {s.newTab}
-                  </a>
+
+                {/* Right: preview */}
+                <div className="pf-stack-preview">
+                  <ProjectImage title={project.title} image={project.image} />
+                  <div className="pf-stack-preview-overlay" />
                 </div>
               </div>
-              <div className="pf-card-info">
-                <span className="pf-card-cat">{s.categories[project.type]}</span>
-                <h3 className="pf-card-title">{project.title}</h3>
-                <p className="pf-card-desc">{getDesc(lang, i)}</p>
-              </div>
-            </div>
+            </ScrollStackItem>
           ))}
-        </div>
+        </ScrollStack>
       </div>
 
       {active && (
-        <div className="pf-modal" onClick={(e) => e.target === e.currentTarget && setActive(null)}>
+        <div className="pf-modal" onClick={e => e.target === e.currentTarget && setActive(null)}>
           <div className="pf-modal-inner">
             <div className="pf-modal-bar">
               <div className="pf-modal-url">
@@ -221,11 +165,17 @@ export default function Portfolio({ lang = 'es' }) {
                 </button>
               </div>
             </div>
-            <iframe
-              src={openProject?.url} title={openProject?.title}
-              className="pf-modal-iframe"
-              sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
-            />
+            <div className="pf-modal-frame-wrap">
+              {!iframeLoaded && <div className="pf-modal-skeleton" />}
+              <iframe
+                src={openProject?.url}
+                title={openProject?.title}
+                className={`pf-modal-iframe${iframeLoaded ? ' pf-modal-iframe--loaded' : ''}`}
+                sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+                loading="lazy"
+                onLoad={() => setIframeLoaded(true)}
+              />
+            </div>
           </div>
         </div>
       )}

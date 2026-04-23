@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Animated Social Icons</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:    #0a0a0a;
+    --card:  #141414;
+    --line:  #ffffff;
+  }
+
+  html, body {
+    height: 100%;
+    background: var(--bg);
+    color: #fff;
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+
+  .stage {
+    min-height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 1.5rem;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+    gap: 1rem;
+    max-width: 720px;
+    width: 100%;
+  }
+
+  .card {
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--card);
+    border-radius: 18px;
+    cursor: pointer;
+    margin: 0 auto;
+    opacity: 0;
+    transform: scale(1);
+    transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+                box-shadow 0.3s ease;
+    animation: fade-in 0.4s ease forwards;
+  }
+
+  /* Entry fade-in — staggered per card */
+  .card:nth-child(1) { animation-delay: 0.05s; }
+  .card:nth-child(2) { animation-delay: 0.1s;  }
+  .card:nth-child(3) { animation-delay: 0.15s; }
+  .card:nth-child(4) { animation-delay: 0.2s;  }
+  .card:nth-child(5) { animation-delay: 0.25s; }
+  .card:nth-child(6) { animation-delay: 0.3s;  }
+  .card:nth-child(7) { animation-delay: 0.35s; }
+  .card:nth-child(8) { animation-delay: 0.4s;  }
+
+  @keyframes fade-in {
+    from { opacity: 0; transform: scale(0.92); }
+    to   { opacity: 1; transform: scale(1);    }
+  }
+
+  /* Hover — scale + soft white glow */
+  .card:hover {
+    transform: scale(1.08);
+    box-shadow:
+      0 0 0 1px rgba(255, 255, 255, 0.08),
+      0 0 28px rgba(255, 255, 255, 0.18);
+  }
+
+  .card svg {
+    width: 36px;
+    height: 36px;
+    stroke: var(--line);
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    overflow: visible;
+  }
+
+  /* Idle stroke-draw loop — every path breathes with dashoffset */
+  .card svg * {
+    stroke-dasharray: 160;
+    stroke-dashoffset: 0;
+    animation: draw 4s ease-in-out infinite;
+  }
+
+  @keyframes draw {
+    0%   { stroke-dashoffset: 0;   }
+    50%  { stroke-dashoffset: 160; }
+    100% { stroke-dashoffset: 320; }
+  }
+
+  /* Per-icon delay offset so the loop isn't synced */
+  .card--ig svg *  { animation-delay: 0s;   }
+  .card--wa svg *  { animation-delay: 0.4s; }
+  .card--fb svg *  { animation-delay: 0.8s; }
+  .card--x  svg *  { animation-delay: 1.2s; }
+  .card--em svg *  { animation-delay: 1.6s; }
+  .card--ph svg *  { animation-delay: 2.0s; }
+  .card--li svg *  { animation-delay: 2.4s; }
+  .card--yt svg *  { animation-delay: 2.8s; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .card svg *  { animation: none; stroke-dashoffset: 0; }
+    .card        { animation: none; opacity: 1; }
+  }
+</style>
+</head>
+<body>
+  <div class="stage">
+    <div class="grid">
+
+      <!-- Instagram -->
+      <a href="https://www.instagram.com/framestudio.devv" class="card card--ig" aria-label="Instagram">
+        <svg viewBox="0 0 24 24" stroke-width="1.7">
+          <rect x="3" y="3" width="18" height="18" rx="5" />
+          <circle cx="12" cy="12" r="4" />
+          <circle cx="17.5" cy="6.5" r="0.6" />
+        </svg>
+      </a>
+
+      <!-- WhatsApp -->
+      <a href="https://wa.me/16864281021" class="card card--wa" aria-label="WhatsApp">
+        <svg viewBox="0 0 24 24" stroke-width="1.6">
+          <path d="M12 3a9 9 0 0 0-7.7 13.6L3 21l4.5-1.2A9 9 0 1 0 12 3z" />
+          <path d="M9 9c-0.5 0-1 0.5-1 1.2 0 2.5 2.3 4.8 4.8 4.8 0.7 0 1.2-0.5 1.2-1l-1-1-1 0.5a3.5 3.5 0 0 1-2.5-2.5l0.5-1-1-1z" />
+        </svg>
+      </a>
+
+      <!-- Facebook -->
+      <a href="https://facebook.com/framestudio.devv" class="card card--fb" aria-label="Facebook">
+        <svg viewBox="0 0 24 24" stroke-width="1.7">
+          <circle cx="12" cy="12" r="9" />
+          <path d="M13.5 8H15V5.5h-1.5c-1.1 0-2 0.9-2 2V10h-1.5v2h1.5v6h2v-6H15l0.5-2h-2v-1a0.5 0.5 0 0 1 0.5-0.5z" />
+        </svg>
+      </a>
+
+      <!-- X / Twitter -->
+      <a href="https://x.com/framestudio_dev" class="card card--x" aria-label="X">
+        <svg viewBox="0 0 24 24" stroke-width="1.9">
+          <rect x="3" y="3" width="18" height="18" rx="4" />
+          <path d="M7 7l10 10M17 7L7 17" />
+        </svg>
+      </a>
+
+      <!-- Email -->
+      <a href="mailto:studioframe.dev@gmail.com" class="card card--em" aria-label="Email">
+        <svg viewBox="0 0 24 24" stroke-width="1.6">
+          <rect x="3" y="5" width="18" height="14" rx="2" />
+          <path d="M3 7l9 6 9-6" />
+        </svg>
+      </a>
+
+      <!-- Phone -->
+      <a href="tel:+16864281021" class="card card--ph" aria-label="Phone">
+        <svg viewBox="0 0 24 24" stroke-width="1.7">
+          <path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7 12.8 12.8 0 0 0 .7 2.8 2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.5 12.8 12.8 0 0 0 2.8.7A2 2 0 0 1 22 16.9z" />
+        </svg>
+      </a>
+
+      <!-- LinkedIn -->
+      <a href="#" class="card card--li" aria-label="LinkedIn">
+        <svg viewBox="0 0 24 24" stroke-width="1.7">
+          <rect x="3" y="3" width="18" height="18" rx="4" />
+          <path d="M8 10v7M8 7v0.5M12 17v-4a2 2 0 0 1 4 0v4M12 10v7" />
+        </svg>
+      </a>
+
+      <!-- YouTube -->
+      <a href="#" class="card card--yt" aria-label="YouTube">
+        <svg viewBox="0 0 24 24" stroke-width="1.6">
+          <rect x="3" y="6" width="18" height="12" rx="3" />
+          <path d="M11 10l4 2-4 2z" />
+        </svg>
+      </a>
+
+    </div>
+  </div>
+</body>
+</html>

@@ -5,6 +5,7 @@ import Hero from './components/Hero'
 import CustomCursor from './components/CustomCursor'
 import PageLoader from './components/PageLoader'
 import SectionSkeleton from './components/SectionSkeleton'
+import { initScrollAnimations, refreshScrollAnimations } from './utils/scrollAnimations'
 
 // Lazy load below-the-fold components
 const Services = lazy(() => import('./components/Services'))
@@ -41,7 +42,40 @@ export default function App() {
     }
     requestAnimationFrame(raf)
 
-    const timer = setTimeout(() => setLoaded(true), 2200)
+    const timer = setTimeout(() => setLoaded(true), 2700)
+
+    // Register scroll-driven animations for elements already in the DOM.
+    // Lazy-loaded sections call the same helper again when they mount.
+    initScrollAnimations()
+
+    // Rescan periodically while lazy sections mount, then refresh positions.
+    const scanTimers = [500, 1200, 2500, 4000].map(ms =>
+      setTimeout(() => { initScrollAnimations(); refreshScrollAnimations() }, ms)
+    )
+
+    // Refresh after the window has fully settled (fonts, images, videos).
+    const onLoad = () => refreshScrollAnimations()
+    window.addEventListener('load', onLoad)
+
+    // Intercept in-page anchor clicks so Lenis animates the scroll
+    // instead of the browser jumping instantly.
+    const onAnchorClick = (e) => {
+      const a = e.target.closest('a[href^="#"]')
+      if (!a) return
+      const href = a.getAttribute('href')
+      if (!href || href === '#' || href.length < 2) return
+      const target = document.querySelector(href)
+      if (!target) return
+      e.preventDefault()
+      lenis.scrollTo(target, {
+        duration: 1.4,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        offset: -10,
+      })
+      // Keep the URL hash in sync for share/back navigation
+      history.replaceState(null, '', href)
+    }
+    document.addEventListener('click', onAnchorClick)
 
     // Pause background videos when they leave viewport — 5 simultaneous
     // autoplay videos crush CPU/GPU. Each section's video now only plays
@@ -65,6 +99,9 @@ export default function App() {
       lenis.destroy()
       clearTimeout(timer)
       clearTimeout(vidTimer)
+      scanTimers.forEach(clearTimeout)
+      window.removeEventListener('load', onLoad)
+      document.removeEventListener('click', onAnchorClick)
       videoObserver.disconnect()
     }
   }, [])
