@@ -9,6 +9,7 @@ import { initScrollAnimations, refreshScrollAnimations } from './utils/scrollAni
 
 // Lazy load below-the-fold components
 const Services = lazy(() => import('./components/Services'))
+const FeaturesGrid = lazy(() => import('./components/FeaturesGrid'))
 const Portfolio = lazy(() => import('./components/Portfolio'))
 const About = lazy(() => import('./components/About'))
 const QuoteBanner = lazy(() => import('./components/QuoteBanner'))
@@ -123,6 +124,9 @@ export default function App() {
         <Hero lang={lang} />
         <Suspense fallback={<SectionSkeleton />}>
           <Services lang={lang} />
+        </Suspense>
+        <Suspense fallback={<SectionSkeleton />}>
+          <FeaturesGrid lang={lang} />
         </Suspense>
         <Suspense fallback={<SectionSkeleton />}>
           <Portfolio lang={lang} />

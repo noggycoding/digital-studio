@@ -1,0 +1,91 @@
+.neu-features-sec {
+  padding: 6rem 2rem;
+  background-color: var(--bg-primary);
+  display: flex;
+  justify-content: center;
+  position: relative;
+  z-index: 10;
+}
+
+.neu-features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2.5rem;
+  max-width: 1050px;
+  width: 100%;
+}
+
+.neu-card {
+  background-color: #1a1a1e;
+  border-radius: 20px;
+  padding: 2.2rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  /* Neumorphic outer shadow: dark right-bottom, light top-left */
+  box-shadow: 
+    -6px -6px 16px rgba(255, 255, 255, 0.02),
+    6px 6px 16px rgba(0, 0, 0, 0.6);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.neu-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 
+    -8px -8px 20px rgba(255, 255, 255, 0.04),
+    8px 8px 20px rgba(0, 0, 0, 0.5);
+}
+
+.neu-icon-wrap {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: #1a1a1e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Neumorphic outer shadow for the circle to make it pop out */
+  box-shadow: 
+    -4px -4px 10px rgba(255, 255, 255, 0.04),
+    4px 4px 10px rgba(0, 0, 0, 0.4);
+  margin-bottom: 0.5rem;
+  position: relative;
+}
+
+.neu-icon-wrap svg {
+  width: 24px;
+  height: 24px;
+  color: #fff;
+  opacity: 0.85;
+}
+
+.neu-title {
+  color: rgba(255, 255, 255, 0.85);
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  font-weight: 300;
+  letter-spacing: 0.02em;
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .neu-features-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+  }
+}
+
+@media (max-width: 520px) {
+  .neu-features-sec {
+    padding: 4rem 1.5rem;
+  }
+  .neu-features-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  .neu-card {
+    padding: 2rem 1.8rem;
+  }
+}

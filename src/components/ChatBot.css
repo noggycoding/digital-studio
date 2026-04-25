@@ -537,10 +537,18 @@
    ═══════════════════════════════════════════════════════════ */
 @media (max-width: 480px) {
   .chat-trigger {
-    bottom: 1.25rem;
-    right: 1.25rem;
-    width: 54px;
-    height: 54px;
+    bottom: 1.2rem;
+    right: 1.2rem;
+    width: 50px;
+    height: 50px;
+  }
+  .chat-trigger-logo {
+    width: 44px;
+    height: 44px;
+  }
+  .chat-icon-wrap {
+    width: 46px;
+    height: 46px;
   }
   .chat-panel {
     right: 1rem;

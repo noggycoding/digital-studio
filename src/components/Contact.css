@@ -13,7 +13,8 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: 0.45;
+  opacity: 0.65;
+  filter: brightness(1.1);
   z-index: 0;
 }
 
@@ -23,10 +24,10 @@
   z-index: 1;
   background: linear-gradient(
     180deg,
-    rgba(6,6,6,0.55) 0%,
-    rgba(6,6,6,0.25) 40%,
-    rgba(6,6,6,0.25) 60%,
-    rgba(6,6,6,0.70) 100%
+    rgba(6,6,6,0.65) 0%,
+    rgba(6,6,6,0.15) 40%,
+    rgba(6,6,6,0.15) 60%,
+    rgba(6,6,6,0.75) 100%
   );
 }
 
@@ -79,7 +80,17 @@
   font-family: var(--font-display);
   font-style: italic;
   font-weight: 400;
-  color: rgba(221,232,255,0.75);
+  color: rgba(180, 210, 255, 0.85);
+}
+
+.ct-subtitle {
+  margin-top: 1.4rem;
+  max-width: 500px;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.6);
+  letter-spacing: 0.01em;
 }
 
 /* ── Body ── */
@@ -92,15 +103,25 @@
 
 /* ── Form Card ── */
 .ct-form-card {
-  background: rgba(10, 10, 12, 0.78);
-  backdrop-filter: blur(18px) saturate(130%);
-  -webkit-backdrop-filter: blur(18px) saturate(130%);
-  border: 1px solid rgba(255, 255, 255, 0.09);
-  border-radius: 16px;
-  padding: 2.2rem 2rem;
+  position: relative;
+  background: rgba(10, 10, 12, 0.72);
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 2.5rem;
   box-shadow:
-    0 8px 48px rgba(0, 0, 0, 0.55),
-    0 1px 0 rgba(255, 255, 255, 0.06) inset;
+    0 12px 64px rgba(0, 0, 0, 0.65),
+    0 1px 0 rgba(255, 255, 255, 0.08) inset;
+  transition: transform 0.4s cubic-bezier(0.2, 0, 0.2, 1), box-shadow 0.4s ease;
+}
+
+.ct-form-card:hover {
+  transform: translateY(-5px);
+  box-shadow:
+    0 24px 80px rgba(0, 0, 0, 0.8),
+    0 0 40px rgba(180, 210, 255, 0.08);
+  border-color: rgba(180, 210, 255, 0.2);
 }
 
 /* ── Form ── */
@@ -365,7 +386,9 @@ a.ct-info-value:hover {
     gap: 2.5rem;
   }
   .ct-form-row {
-    grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
   }
   .ct-sidebar {
     border-left: none;

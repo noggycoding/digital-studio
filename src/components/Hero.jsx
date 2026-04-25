@@ -45,8 +45,7 @@ export default function Hero({ lang = 'es' }) {
         { sel: '.hero-card-top', from: { opacity: 0, y: -25 } },
         // Top-left brand characters cascade from LEFT
         { sel: '.brand-char', from: { opacity: 0, x: -28 }, stagger: 0.04 },
-        // Top-right section tag characters cascade from RIGHT
-        { sel: '.tag-char', from: { opacity: 0, x: 28 }, stagger: 0.035 },
+        { sel: '.hero-status-badge', from: { opacity: 0, scale: 0.8, x: -10 } },
 
         // ── H1 title container fades + scales ──
         { sel: '.hero-main-title', from: { opacity: 0, scale: 0.96 } },
@@ -79,6 +78,9 @@ export default function Hero({ lang = 'es' }) {
         // Stat inner text from bottom
         { sel: '.hero-stat-num',   from: { opacity: 0, y: 18 }, stagger: 0.05 },
         { sel: '.hero-stat-label', from: { opacity: 0, y: 12 }, stagger: 0.05 },
+
+        // ── Social links: float in from bottom ──
+        { sel: '.hs-link', from: { opacity: 0, y: 15, scale: 0.8 }, stagger: 0.06 },
       ]
 
       // Resolve `from` for each group (function gives per-element state)
@@ -102,7 +104,9 @@ export default function Hero({ lang = 'es' }) {
         // Top bar drops in
         .to('.hero-card-top', { opacity: 1, y: 0, duration: 0.7, ease: 'expo.out' }, '-=0.55')
         .to('.brand-char', { opacity: 1, x: 0, stagger: 0.04, duration: 0.6 }, '-=0.5')
-        .to('.tag-char',   { opacity: 1, x: 0, stagger: 0.035, duration: 0.6 }, '<')
+        .to('.hero-status-badge', { opacity: 1, scale: 1, x: 0, duration: 0.5, ease: 'back.out(1.5)' }, '-=0.4')
+        // Social links cascade
+        .to('.hs-link', { opacity: 1, y: 0, scale: 1, stagger: 0.08, duration: 0.7, ease: 'back.out(1.7)' }, '-=0.4')
         // H1 title envelope
         .to('.hero-main-title', { opacity: 1, scale: 1, duration: 0.65, ease: 'expo.out' }, '-=0.4')
         // CHARS drop from above with elastic squash-and-stretch
@@ -156,11 +160,17 @@ export default function Hero({ lang = 'es' }) {
       <div className="hero-card">
 
         <div className="hero-card-top">
-          <div className="hero-brand-mark">
-            <span className="hero-brand-dot" />
-            <span className="brand-text">
-              {splitChars(t.eyebrow, 'brand-char')}
-            </span>
+          <div className="hero-top-left">
+            <div className="hero-brand-mark">
+              <span className="hero-brand-dot" />
+              <span className="brand-text">
+                {splitChars(t.eyebrow, 'brand-char')}
+              </span>
+            </div>
+            <div className="hero-status-badge">
+              <span className="status-dot-pulse"></span>
+              <span className="status-text">{t.status}</span>
+            </div>
           </div>
 
           <div className="hero-socials" aria-label="Social links">

@@ -15,25 +15,6 @@ const BASE_PROJECTS = [
   { id: 4, title: 'Perfect Salon', year: '2025', url: 'https://v0-perfect-salon-website.vercel.app/', type: 'landing', color: '#4a3510', image: '/perfectsalon.png' },
 ]
 
-const DESCRIPTIONS = {
-  es: [
-    'Sitio con identidad visual fuerte, diseño moderno y experiencia de usuario fluida.',
-    'Presencia digital con diseño limpio, navegación intuitiva y estética profesional.',
-    'Landing page de alto impacto con secciones bien definidas y llamadas a la acción claras.',
-    'Sitio para salón de belleza con booking online, paleta elegante y diseño orientado a conversión.',
-  ],
-  en: [
-    'Strong visual identity, modern design and smooth user experience.',
-    'Digital presence with clean design, intuitive navigation and professional aesthetics.',
-    'High-impact landing page with well-defined sections and clear calls to action.',
-    'Beauty salon site with online booking, elegant palette and conversion-focused design.',
-  ],
-}
-
-function getDesc(lang, i) {
-  return (DESCRIPTIONS[lang] || DESCRIPTIONS.es)[i]
-}
-
 function ProjectImage({ title, image }) {
   const [loaded, setLoaded] = useState(false)
   return (
@@ -114,7 +95,7 @@ export default function Portfolio({ lang = 'es' }) {
                     <span className="pf-stack-year">{project.year}</span>
                   </div>
                   <h3 className="pf-stack-title">{project.title}</h3>
-                  <p className="pf-stack-desc">{getDesc(lang, i)}</p>
+                  <p className="pf-stack-desc">{(s.descriptions || [])[i]}</p>
                   <div className="pf-stack-actions">
                     <button className="pf-action-btn pf-action-expand" onClick={() => setActive(project.id)}>
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">

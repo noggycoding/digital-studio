@@ -71,6 +71,9 @@ export default function Contact({ lang = 'es' }) {
             {s.title[0]}<br />
             <em className="ct-title-em">{s.title[1]}</em>
           </h2>
+          <p className="ct-subtitle" data-aos="fade-right" data-aos-delay="300" data-aos-duration="1000">
+            {s.phrase}
+          </p>
         </div>
 
         <div className="ct-body">
@@ -83,7 +86,7 @@ export default function Contact({ lang = 'es' }) {
               </div>
               <div className="ct-field" data-aos="fade-up-left" data-aos-delay="300">
                 <label className="ct-label" htmlFor="ct-email">{s.form.email}</label>
-                <input className="ct-input" id="ct-email" type="email" placeholder="tu@email.com" autoComplete="email" />
+                <input className="ct-input" id="ct-email" type="email" placeholder={s.form.emailPlaceholder} autoComplete="email" />
               </div>
             </div>
             <div className="ct-field" data-aos="fade-up-right" data-aos-delay="380">

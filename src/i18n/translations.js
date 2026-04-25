@@ -1,6 +1,7 @@
 export const translations = {
   en: {
     eyebrow: 'Digital Studio',
+    status: 'Available for new projects',
     motto: 'A foolish man blames, a wise man learns',
     heroTitle: 'We Scale Your Business',
     slogan: 'Your business, smarter than ever',
@@ -34,16 +35,19 @@ export const translations = {
             title: 'Web Design',
             accent: 'that converts',
             desc: 'Fast, modern sites aligned with your brand. From landing pages to full e-commerce.',
+            tags: ['Landing Pages', 'E-commerce', 'Portfolios'],
           },
           {
             title: 'Automation',
             accent: 'that works on its own',
             desc: 'Smart workflows that eliminate repetitive tasks and grow your business 24/7.',
+            tags: ['CRM', 'Email Flows', 'Integrations'],
           },
           {
             title: 'Social Media',
             accent: 'that drives impact',
             desc: 'Strategy, content and community management. Your brand where your audience is.',
+            tags: ['Instagram', 'TikTok', 'LinkedIn'],
           },
         ],
       },
@@ -53,6 +57,12 @@ export const translations = {
         viewSite: 'View site',
         newTab: 'New tab',
         categories: { web: 'Website', landing: 'Landing Page' },
+        descriptions: [
+          'Strong visual identity, modern design and smooth user experience.',
+          'Digital presence with clean design, intuitive navigation and professional aesthetics.',
+          'High-impact landing page with well-defined sections and clear calls to action.',
+          'Beauty salon site with online booking, elegant palette and conversion-focused design.',
+        ],
       },
       about: {
         label: 'How we can help',
@@ -87,10 +97,12 @@ export const translations = {
       contact: {
         label: 'Contact',
         title: ['Ready to', 'elevate your brand?'],
+        phrase: 'Contact us to solve your problem and review your project specifications.',
         form: {
           name: 'Name',
           namePlaceholder: 'Your name',
           email: 'Email',
+          emailPlaceholder: 'your@email.com',
           service: 'Service',
           servicePlaceholder: 'Select a service',
           services: ['Web Design', 'Automation', 'Social Media', 'Digital Consulting'],
@@ -122,6 +134,7 @@ export const translations = {
   },
   es: {
     eyebrow: 'Estudio Digital',
+    status: 'Disponible para nuevos proyectos',
     motto: 'El necio culpa, el sabio aprende',
     heroTitle: 'Escalamos tu Negocio',
     slogan: 'Tu negocio más inteligente que nunca',
@@ -155,16 +168,19 @@ export const translations = {
             title: 'Diseño Web',
             accent: 'que convierte',
             desc: 'Sitios rápidos, modernos y alineados a tu marca. Desde landing pages hasta e-commerce completos.',
+            tags: ['Landing Pages', 'E-commerce', 'Portafolios'],
           },
           {
             title: 'Automatización',
             accent: 'que trabaja sola',
             desc: 'Flujos de trabajo inteligentes que eliminan tareas repetitivas y hacen crecer tu negocio 24/7.',
+            tags: ['CRM', 'Email Flows', 'Integraciones'],
           },
           {
             title: 'Redes Sociales',
             accent: 'que generan impacto',
             desc: 'Estrategia, contenido y gestión de comunidad. Tu marca presente donde está tu audiencia.',
+            tags: ['Instagram', 'TikTok', 'LinkedIn'],
           },
         ],
       },
@@ -174,6 +190,12 @@ export const translations = {
         viewSite: 'Ver sitio',
         newTab: 'Nueva pestaña',
         categories: { web: 'Sitio Web', landing: 'Landing Page' },
+        descriptions: [
+          'Sitio con identidad visual fuerte, diseño moderno y experiencia de usuario fluida.',
+          'Presencia digital con diseño limpio, navegación intuitiva y estética profesional.',
+          'Landing page de alto impacto con secciones bien definidas y llamadas a la acción claras.',
+          'Sitio para salón de belleza con booking online, paleta elegante y diseño orientado a conversión.',
+        ],
       },
       about: {
         label: 'Cómo podemos ayudarte',
@@ -208,10 +230,12 @@ export const translations = {
       contact: {
         label: 'Contacto',
         title: ['¿Listo para', 'elevar tu marca?'],
+        phrase: 'Contáctanos para solucionar tu problema y ver tus especificaciones.',
         form: {
           name: 'Nombre',
           namePlaceholder: 'Tu nombre',
           email: 'Email',
+          emailPlaceholder: 'tu@email.com',
           service: 'Servicio',
           servicePlaceholder: 'Selecciona un servicio',
           services: ['Diseño Web', 'Automatización', 'Redes Sociales', 'Consultoría Digital'],
@@ -243,6 +267,8 @@ export const translations = {
   },
   fr: {
     eyebrow: 'Studio Numérique',
+    status: 'Disponible pour de nouveaux projets',
+    heroTitle: 'Nous Propulsons Votre Entreprise',
     slogan: 'Votre entreprise, plus intelligente que jamais',
     headline: ['Nous créons', 'des Expériences', 'Digitales'],
     subheading: 'Design web, automatisation et réseaux sociaux pour entreprises modernes',
@@ -269,16 +295,19 @@ export const translations = {
             title: 'Design Web',
             accent: 'qui convertit',
             desc: "Sites rapides, modernes et alignés à votre marque. Des landing pages aux e-commerces complets.",
+            tags: ['Landing Pages', 'E-commerce', 'Portfolios'],
           },
           {
-            title: 'Automatisation',
+            title: 'Automatización',
             accent: 'qui travaille seule',
             desc: 'Flux de travail intelligents qui éliminent les tâches répétitives et font croître votre entreprise 24/7.',
+            tags: ['CRM', 'Email Flows', 'Intégrations'],
           },
           {
             title: 'Réseaux Sociaux',
             accent: 'qui génèrent de l\'impact',
             desc: 'Stratégie, contenu et gestion de communauté. Votre marque présente là où est votre audience.',
+            tags: ['Instagram', 'TikTok', 'LinkedIn'],
           },
         ],
       },
@@ -288,6 +317,12 @@ export const translations = {
         viewSite: 'Voir le site',
         newTab: 'Nouvel onglet',
         categories: { web: 'Site Web', landing: 'Page d\'atterrissage' },
+        descriptions: [
+          'Identité visuelle forte, design moderne et expérience utilisateur fluide.',
+          'Présence digitale avec un design épuré, navigation intuitive et esthétique professionnelle.',
+          'Page d\'atterrissage à fort impact avec des sections bien définies et des appels à l\'action clairs.',
+          'Site de salon de beauté avec réservation en ligne, palette élégante et design orienté conversion.',
+        ],
       },
       about: {
         label: 'Comment nous pouvons aider',
@@ -322,10 +357,12 @@ export const translations = {
       contact: {
         label: 'Contact',
         title: ['Prêt à', 'élever votre marque ?'],
+        phrase: 'Contactez-nous pour résoudre votre problème et voir vos spécifications.',
         form: {
           name: 'Nom',
           namePlaceholder: 'Votre nom',
           email: 'Email',
+          emailPlaceholder: 'votre@email.com',
           service: 'Service',
           servicePlaceholder: 'Sélectionnez un service',
           services: ['Design Web', 'Automatisation', 'Réseaux Sociaux', 'Conseil Digital'],
@@ -357,6 +394,8 @@ export const translations = {
   },
   pt: {
     eyebrow: 'Estúdio Digital',
+    status: 'Disponível para novos projetos',
+    heroTitle: 'Escalamos o Seu Negócio',
     slogan: 'O seu negócio, mais inteligente do que nunca',
     headline: ['Criamos', 'Experiências', 'Digitais'],
     subheading: 'Design web, automação e redes sociais para negócios modernos',
@@ -383,16 +422,19 @@ export const translations = {
             title: 'Design Web',
             accent: 'que converte',
             desc: 'Sites rápidos, modernos e alinhados à sua marca. De landing pages a e-commerces completos.',
+            tags: ['Landing Pages', 'E-commerce', 'Portfólios'],
           },
           {
             title: 'Automação',
             accent: 'que trabalha sozinha',
             desc: 'Fluxos de trabalho inteligentes que eliminam tarefas repetitivas e fazem o seu negócio crescer 24/7.',
+            tags: ['CRM', 'Email Flows', 'Integrações'],
           },
           {
             title: 'Redes Sociais',
             accent: 'que geram impacto',
             desc: 'Estratégia, conteúdo e gestão de comunidade. A sua marca presente onde está a sua audiência.',
+            tags: ['Instagram', 'TikTok', 'LinkedIn'],
           },
         ],
       },
@@ -436,10 +478,12 @@ export const translations = {
       contact: {
         label: 'Contato',
         title: ['Pronto para', 'elevar a sua marca?'],
+        phrase: 'Contate-nos para resolver o seu problema e ver as suas especificações.',
         form: {
           name: 'Nome',
           namePlaceholder: 'O seu nome',
           email: 'Email',
+          emailPlaceholder: 'seu@email.com',
           service: 'Serviço',
           servicePlaceholder: 'Selecione um serviço',
           services: ['Design Web', 'Automação', 'Redes Sociais', 'Consultoria Digital'],
@@ -471,6 +515,8 @@ export const translations = {
   },
   zh: {
     eyebrow: '数字工作室',
+    status: '可接受新项目',
+    heroTitle: '助您业务腾飞',
     slogan: '您的业务，比以往更智能',
     headline: ['我们构建', '数字化', '体验'],
     subheading: '为现代企业提供网页设计、自动化和社交媒体管理',
@@ -497,16 +543,19 @@ export const translations = {
             title: '网页设计',
             accent: '促进转化',
             desc: '快速、现代且符合您品牌的网站。从落地页到完整电商。',
+            tags: ['Landing Pages', 'E-commerce', 'Portfolios'],
           },
           {
             title: '自动化',
             accent: '自主运行',
             desc: '智能工作流程，消除重复性任务，让您的业务全天候增长。',
+            tags: ['CRM', 'Email Flows', 'Integrations'],
           },
           {
             title: '社交媒体',
             accent: '创造影响力',
             desc: '策略、内容和社区管理。让您的品牌出现在受众所在的地方。',
+            tags: ['Instagram', 'TikTok', 'LinkedIn'],
           },
         ],
       },
@@ -516,6 +565,12 @@ export const translations = {
         viewSite: '查看网站',
         newTab: '新标签页',
         categories: { web: '网站', landing: '落地页' },
+        descriptions: [
+          'Strong visual identity, modern design and smooth user experience.',
+          'Digital presence with clean design, intuitive navigation and professional aesthetics.',
+          'High-impact landing page with well-defined sections and clear calls to action.',
+          'Beauty salon site with online booking, elegant palette and conversion-focused design.',
+        ],
       },
       about: {
         label: '我们如何帮助您',
@@ -550,10 +605,12 @@ export const translations = {
       contact: {
         label: '联系我们',
         title: ['准备好', '提升您的品牌了吗？'],
+        phrase: '联系我们以解决您的问题并查看您的规格。',
         form: {
           name: '姓名',
           namePlaceholder: '您的姓名',
           email: '电子邮件',
+          emailPlaceholder: 'your@email.com',
           service: '服务',
           servicePlaceholder: '选择一项服务',
           services: ['网页设计', '自动化', '社交媒体', '数字咨询'],
@@ -585,6 +642,8 @@ export const translations = {
   },
   ar: {
     eyebrow: 'استوديو رقمي',
+    status: 'متاح لمشاريع جديدة',
+    heroTitle: 'نحن نطور عملك',
     slogan: 'عملك التجاري، أكثر ذكاءً من أي وقت مضى',
     headline: ['نبني', 'تجارب', 'رقمية'],
     subheading: 'تصميم الويب والأتمتة وإدارة وسائل التواصل للشركات الحديثة',
@@ -611,16 +670,19 @@ export const translations = {
             title: 'تصميم الويب',
             accent: 'الذي يحوّل',
             desc: 'مواقع سريعة وحديثة تتوافق مع علامتك التجارية. من صفحات الهبوط إلى المتاجر الإلكترونية الكاملة.',
+            tags: ['Landing Pages', 'E-commerce', 'Portfolios'],
           },
           {
             title: 'الأتمتة',
             accent: 'التي تعمل وحدها',
             desc: 'سير عمل ذكية تلغي المهام المتكررة وتنمي عملك على مدار الساعة.',
+            tags: ['CRM', 'Email Flows', 'Integrations'],
           },
           {
             title: 'وسائل التواصل الاجتماعي',
             accent: 'التي تصنع الأثر',
             desc: 'الاستراتيجية والمحتوى وإدارة المجتمع. علامتك التجارية حيث يوجد جمهورك.',
+            tags: ['Instagram', 'TikTok', 'LinkedIn'],
           },
         ],
       },
@@ -630,6 +692,12 @@ export const translations = {
         viewSite: 'عرض الموقع',
         newTab: 'علامة تبويب جديدة',
         categories: { web: 'موقع ويب', landing: 'صفحة هبوط' },
+        descriptions: [
+          'Strong visual identity, modern design and smooth user experience.',
+          'Digital presence with clean design, intuitive navigation and professional aesthetics.',
+          'High-impact landing page with well-defined sections and clear calls to action.',
+          'Beauty salon site with online booking, elegant palette and conversion-focused design.',
+        ],
       },
       about: {
         label: 'كيف يمكننا مساعدتك',
@@ -664,10 +732,12 @@ export const translations = {
       contact: {
         label: 'تواصل معنا',
         title: ['هل أنت مستعد', 'لرفع مستوى علامتك؟'],
+        phrase: 'اتصل بنا لحل مشكلتك والاطلاع على مواصفاتك.',
         form: {
           name: 'الاسم',
           namePlaceholder: 'اسمك',
           email: 'البريد الإلكتروني',
+          emailPlaceholder: 'your@email.com',
           service: 'الخدمة',
           servicePlaceholder: 'اختر خدمة',
           services: ['تصميم الويب', 'الأتمتة', 'وسائل التواصل الاجتماعي', 'الاستشارات الرقمية'],
@@ -699,6 +769,8 @@ export const translations = {
   },
   ru: {
     eyebrow: 'Цифровая Студия',
+    status: 'Доступен для новых проектов',
+    heroTitle: 'Масштабируем Ваш Бизнес',
     slogan: 'Ваш бизнес — умнее, чем когда-либо',
     headline: ['Мы создаём', 'цифровой', 'опыт'],
     subheading: 'Веб-дизайн, автоматизация и соцсети для современного бизнеса',
@@ -725,16 +797,19 @@ export const translations = {
             title: 'Веб-дизайн',
             accent: 'который конвертирует',
             desc: 'Быстрые, современные сайты, соответствующие вашему бренду. От лендингов до полноценных интернет-магазинов.',
+            tags: ['Landing Pages', 'E-commerce', 'Portfolios'],
           },
           {
             title: 'Автоматизация',
             accent: 'которая работает сама',
             desc: 'Умные рабочие процессы, которые устраняют рутинные задачи и развивают ваш бизнес 24/7.',
+            tags: ['CRM', 'Email Flows', 'Integrations'],
           },
           {
             title: 'Социальные сети',
             accent: 'которые создают эффект',
             desc: 'Стратегия, контент и управление сообществом. Ваш бренд там, где ваша аудитория.',
+            tags: ['Instagram', 'TikTok', 'LinkedIn'],
           },
         ],
       },
@@ -744,6 +819,12 @@ export const translations = {
         viewSite: 'Открыть сайт',
         newTab: 'Новая вкладка',
         categories: { web: 'Веб-сайт', landing: 'Лендинг' },
+        descriptions: [
+          'Strong visual identity, modern design and smooth user experience.',
+          'Digital presence with clean design, intuitive navigation and professional aesthetics.',
+          'High-impact landing page with well-defined sections and clear calls to action.',
+          'Beauty salon site with online booking, elegant palette and conversion-focused design.',
+        ],
       },
       about: {
         label: 'Как мы можем помочь',
@@ -778,10 +859,12 @@ export const translations = {
       contact: {
         label: 'Контакты',
         title: ['Готовы', 'поднять свой бренд?'],
+        phrase: 'Свяжитесь с нами, чтобы решить вашу проблему и обсудить спецификации.',
         form: {
           name: 'Имя',
           namePlaceholder: 'Ваше имя',
           email: 'Email',
+          emailPlaceholder: 'your@email.com',
           service: 'Услуга',
           servicePlaceholder: 'Выберите услугу',
           services: ['Веб-дизайн', 'Автоматизация', 'Социальные сети', 'Цифровой консалтинг'],
@@ -813,12 +896,14 @@ export const translations = {
   },
   hi: {
     eyebrow: 'डिजिटल स्टूडियो',
+    status: 'नए प्रोजेक्ट्स के लिए उपलब्ध',
+    heroTitle: 'हम आपके व्यवसाय को बढ़ाते हैं',
     slogan: 'आपका व्यवसाय, पहले से कहीं अधिक स्मार्ट',
     headline: ['हम बनाते हैं', 'डिजिटल', 'अनुभव'],
     subheading: 'आधुनिक व्यवसायों के लिए वेब डिज़ाइन, स्वचालन और सोशल मीडिया',
     cta_primary: 'काम देखें',
     cta_secondary: 'शुरू करें',
-    nav: { services: 'सेवाएं', portfolio: 'पोर्टफोलियो', about: 'हमारे बारे में', contact: 'संपर्क' },
+    nav: { services: 'सेवाएं', portfolio: 'पोर्टफोलيو', about: 'हमारे बारे में', contact: 'संपर्क' },
     stats: { projects: 'प्रोजेक्ट', services: 'सेवाएं' },
     motivations: [
       'यह आप बनाम आपके बहाने हैं',
@@ -839,16 +924,19 @@ export const translations = {
             title: 'वेब डिज़ाइन',
             accent: 'जो रूपांतरित करे',
             desc: 'तेज़, आधुनिक और आपके ब्रांड के अनुरूप वेबसाइट। लैंडिंग पेज से लेकर पूर्ण ई-कॉमर्स तक।',
+            tags: ['Landing Pages', 'E-commerce', 'Portfolios'],
           },
           {
             title: 'स्वचालन',
             accent: 'जो खुद काम करे',
             desc: 'स्मार्ट वर्कफ़्लो जो दोहराने वाले कार्यों को हटाते हैं और आपके व्यवसाय को 24/7 बढ़ाते हैं।',
+            tags: ['CRM', 'Email Flows', 'Integrations'],
           },
           {
             title: 'सोशल मीडिया',
             accent: 'जो प्रभाव उत्पन्न करे',
             desc: 'रणनीति, सामग्री और समुदाय प्रबंधन। आपका ब्रांड वहाँ मौजूद जहाँ आपका दर्शक है।',
+            tags: ['Instagram', 'TikTok', 'LinkedIn'],
           },
         ],
       },
@@ -858,6 +946,12 @@ export const translations = {
         viewSite: 'साइट देखें',
         newTab: 'नया टैब',
         categories: { web: 'वेबसाइट', landing: 'लैंडिंग पेज' },
+        descriptions: [
+          'Strong visual identity, modern design and smooth user experience.',
+          'Digital presence with clean design, intuitive navigation and professional aesthetics.',
+          'High-impact landing page with well-defined sections and clear calls to action.',
+          'Beauty salon site with online booking, elegant palette and conversion-focused design.',
+        ],
       },
       about: {
         label: 'हम कैसे मदद करते हैं',
@@ -892,10 +986,12 @@ export const translations = {
       contact: {
         label: 'संपर्क',
         title: ['क्या आप तैयार हैं', 'अपने ब्रांड को ऊपर उठाने के लिए?'],
+        phrase: 'अपनी समस्या को हल करने और अपनी विशिष्टताओं को देखने के लिए हमसे संपर्क करें।',
         form: {
           name: 'नाम',
           namePlaceholder: 'आपका नाम',
           email: 'ईमेल',
+          emailPlaceholder: 'your@email.com',
           service: 'सेवा',
           servicePlaceholder: 'एक सेवा चुनें',
           services: ['वेब डिज़ाइन', 'स्वचालन', 'सोशल मीडिया', 'डिजिटल परामर्श'],

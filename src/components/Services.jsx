@@ -59,12 +59,6 @@ export default function Services({ lang = 'es' }) {
     return () => ctx.revert()
   }, { scope: sectionRef })
 
-  const TAGS = [
-    ['Landing Pages', 'E-commerce', 'Portafolios'],
-    ['CRM', 'Email Flows', 'Integraciones'],
-    ['Instagram', 'TikTok', 'LinkedIn'],
-  ]
-
   return (
     <section className="services" id="services" ref={sectionRef}>
       <video className="sv-video" autoPlay muted loop playsInline>
@@ -119,7 +113,7 @@ export default function Services({ lang = 'es' }) {
                 </div>
                 <div className="sv-card-foot">
                   <div className="sv-tags">
-                    {TAGS[i].map((tag, j) => (
+                    {(card.tags || []).map((tag, j) => (
                       <span className="sv-tag-pill" key={tag} data-aos="fade-up" data-aos-delay={i * 130 + j * 80 + 300}>{tag}</span>
                     ))}
                   </div>
