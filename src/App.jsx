@@ -3,7 +3,6 @@ import Lenis from 'lenis'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import CustomCursor from './components/CustomCursor'
-import IntroAnimation from './components/IntroAnimation'
 import SectionSkeleton from './components/SectionSkeleton'
 import { initScrollAnimations, refreshScrollAnimations } from './utils/scrollAnimations'
 
@@ -18,7 +17,6 @@ const LangFlash = lazy(() => import('./components/LangFlash'))
 const ChatBot = lazy(() => import('./components/ChatBot'))
 
 export default function App() {
-  const [introComplete, setIntroComplete] = useState(false)
   const [lang, setLang]           = useState('es')
   const [flashKey, setFlashKey]   = useState(0)
   const flashLang                 = useRef('es')
@@ -27,10 +25,6 @@ export default function App() {
     setLang(code)
     flashLang.current = code
     setFlashKey(k => k + 1)
-  }
-
-  const handleIntroComplete = () => {
-    setIntroComplete(true)
   }
 
   useEffect(() => {
@@ -109,7 +103,6 @@ export default function App() {
 
   return (
     <>
-      <IntroAnimation onComplete={handleIntroComplete} />
       <CustomCursor />
       <Suspense fallback={null}>
         <LangFlash lang={flashLang.current} flashKey={flashKey} />
@@ -121,7 +114,7 @@ export default function App() {
       </Suspense>
 
       <main>
-        <Hero lang={lang} skipIntroAnimation={introComplete} />
+        <Hero lang={lang} />
         <Suspense fallback={<SectionSkeleton />}>
           <Services lang={lang} />
         </Suspense>
