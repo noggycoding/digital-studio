@@ -9,7 +9,7 @@ export default function PageLoader({ loaded }) {
               <span
                 key={i}
                 className="loader-char"
-                style={{ animationDelay: `${1.3 + i * 0.045}s` }}
+                style={{ animationDelay: `${0.8 + i * 0.035}s` }}
               >
                 {c}
               </span>

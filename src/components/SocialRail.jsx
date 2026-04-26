@@ -134,8 +134,7 @@ const LINKS = [
   { Icon: PhoneIcon,     href: 'tel:+16864281021',                                                                                     label: '+1 (686) 428-1021' },
   { Icon: InstagramIcon, href: 'https://www.instagram.com/framestudio.devv?igsh=NGdjZWU5MTM1MG1z&utm_source=qr',                        label: '@framestudio.devv' },
   { Icon: WhatsAppIcon,  href: 'https://wa.me/16864281021',                                                                             label: 'WhatsApp'          },
-  { Icon: FacebookIcon,  href: 'https://facebook.com/framestudio.devv',                                                                 label: 'Facebook'          },
-  { Icon: XIcon,         href: 'https://x.com/framestudio_dev',                                                                         label: '@framestudio_dev'  },
+  { Icon: FacebookIcon,  href: 'https://www.facebook.com/share/14YwKonczfm/?mibextid=wwXIfr',                                           label: 'Facebook'          },
 ]
 
 export default function SocialRail() {

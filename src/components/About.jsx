@@ -47,7 +47,7 @@ export default function About({ lang = 'es' }) {
 
       // Cards: dramatic entrance → then icon float
       const cardTl = gsap.timeline({
-        scrollTrigger: { trigger: '.ab-values', start: 'top 76%', once: true },
+        scrollTrigger: { trigger: '.ab-values', start: 'top 90%', once: true },
         onComplete() {
           // Float handled by CSS animation — no GSAP repeat loops needed
           document.querySelectorAll('.ab-value-icon').forEach(el => {
@@ -57,13 +57,13 @@ export default function About({ lang = 'es' }) {
       })
       cardTl
         .from('.ab-value', {
-          y: 90, opacity: 0, scale: 0.93, duration: 1.05, ease: 'power3.out',
-          stagger: 0.18, clearProps: 'scale',
+          y: 60, opacity: 0, scale: 0.96, duration: 0.9, ease: 'power3.out',
+          stagger: 0.15, clearProps: 'all',
         })
         .from('.ab-value-icon', {
-          scale: 0, opacity: 0, duration: 0.55, ease: 'back.out(2.5)',
-          stagger: 0.18,
-        }, '-=0.75')
+          scale: 0, opacity: 0, duration: 0.5, ease: 'back.out(2)',
+          stagger: 0.15,
+        }, '-=0.6')
 
       // Divider
       gsap.from('.ab-divider', {

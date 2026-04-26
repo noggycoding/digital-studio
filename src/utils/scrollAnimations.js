@@ -90,9 +90,9 @@ export function initScrollAnimations(root = document) {
       delay,
       scrollTrigger: {
         trigger: el,
-        start:  'top 88%',
-        end:    'top 40%',
-        scrub:  0.6,
+        start:  'top 92%',
+        end:    'top 60%',
+        scrub:  0.4,
         invalidateOnRefresh: true,
       },
     })

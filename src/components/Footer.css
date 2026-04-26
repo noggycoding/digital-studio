@@ -51,6 +51,38 @@
   line-height: 1.7;
   color: rgba(255, 255, 255, 0.5);
   max-width: 280px;
+  margin-bottom: 1.5rem;
+}
+
+.ft-socials {
+  display: flex;
+  gap: 0.8rem;
+}
+
+.ft-social-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.6);
+  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.ft-social-link svg {
+  width: 18px;
+  height: 18px;
+}
+
+.ft-social-link:hover {
+  border-color: rgba(220, 38, 38, 0.4);
+  background: rgba(220, 38, 38, 0.08);
+  color: #ef4444;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.2);
 }
 
 .ft-columns {
@@ -81,10 +113,67 @@
   letter-spacing: 0.02em;
   color: rgba(255, 255, 255, 0.7);
   transition: color 0.2s;
+  text-decoration: none;
 }
 
 .ft-link:hover {
   color: #fff;
+}
+
+.ft-link--contact {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.75rem;
+}
+
+.ft-link--contact svg {
+  flex-shrink: 0;
+  opacity: 0.6;
+}
+
+.ft-link--contact:hover svg {
+  opacity: 1;
+  color: #ef4444;
+}
+
+.ft-availability {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 0.8rem;
+  padding: 0.5rem 0.8rem;
+  background: rgba(34, 197, 94, 0.08);
+  border: 1px solid rgba(34, 197, 94, 0.2);
+  border-radius: 6px;
+  width: fit-content;
+}
+
+.ft-status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #22c55e;
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(1.2); }
+}
+
+.ft-status-text {
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: #22c55e;
+  letter-spacing: 0.04em;
+}
+
+.ft-response {
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.4);
+  margin-top: 0.3rem;
+  font-style: italic;
 }
 
 /* ── Divider ── */
@@ -135,20 +224,32 @@
     grid-template-columns: 1fr;
     gap: 2.5rem;
   }
-  .ft-columns { gap: 2rem; }
+  .ft-columns { 
+    flex-direction: column;
+    gap: 2rem; 
+  }
   .ft-bottom {
     flex-direction: column;
     gap: 1rem;
     text-align: center;
+  }
+  .ft-socials {
+    justify-content: flex-start;
+  }
+  .ft-availability {
+    width: 100%;
+    justify-content: center;
   }
 }
 
 @media (max-width: 520px) {
   .ft-inner { padding: 3rem 1.4rem 2rem; }
   .ft-columns {
-    grid-template-columns: 1fr 1fr;
-    gap: 1.5rem 1rem;
+    gap: 2rem;
   }
   .ft-bottom { padding-top: 1.5rem; }
   .ft-bottom-links { flex-wrap: wrap; justify-content: center; gap: 0.8rem 1.2rem; }
+  .ft-socials {
+    flex-wrap: wrap;
+  }
 }

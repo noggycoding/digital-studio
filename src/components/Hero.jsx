@@ -15,7 +15,7 @@ function splitChars(str, className = 'char') {
   ))
 }
 
-export default function Hero({ lang = 'es' }) {
+export default function Hero({ lang = 'es', skipIntroAnimation = false }) {
   const heroRef      = useRef(null)
   const gsapRunCount = useRef(0)
 
@@ -27,9 +27,12 @@ export default function Hero({ lang = 'es' }) {
   }, [currentLang])
 
   useGSAP(() => {
+    // Skip animations if coming from intro
+    if (skipIntroAnimation) return
+    
     gsapRunCount.current += 1
     const ctx = gsap.context(() => {
-      const delay  = gsapRunCount.current === 1 ? 1.3 : 0.1
+      const delay  = gsapRunCount.current === 1 ? 0.5 : 0.1
       const spring = 'back.out(1.4)'
 
       // ─────────────────────────────────────────────
@@ -60,7 +63,7 @@ export default function Hero({ lang = 'es' }) {
         { sel: '.hero-main-cta', from: { opacity: 0, x: 60, scale: 0.75, y: 10 } },
         { sel: '.cta-char', from: { opacity: 0, x: 25 }, stagger: 0.035 },
 
-        // Media zoom in
+        // Media container (but NOT the video itself)
         { sel: '.hero-media', from: { opacity: 0, scale: 0.9, filter: 'blur(10px)' } },
 
         // Feature card chars from LEFT
@@ -92,10 +95,18 @@ export default function Hero({ lang = 'es' }) {
         return { ...g, els, states }
       })
 
-      // Apply initial hidden state to every element
+      // Apply initial hidden state to every element EXCEPT the video
       resolved.forEach(({ els, states }) => {
-        els.forEach((el, i) => gsap.set(el, states[i]))
+        els.forEach((el, i) => {
+          // Skip video element
+          if (!el.classList.contains('hero-media-video')) {
+            gsap.set(el, states[i])
+          }
+        })
       })
+      
+      // Ensure video is always visible
+      gsap.set('.hero-media-video', { opacity: 1, scale: 1, filter: 'none' })
 
       // ── ENTRY TIMELINE ──
       const tl = gsap.timeline({ defaults: { ease: spring, duration: 0.8 }, delay })
@@ -108,31 +119,31 @@ export default function Hero({ lang = 'es' }) {
         // Social links cascade
         .to('.hs-link', { opacity: 1, y: 0, scale: 1, stagger: 0.08, duration: 0.7, ease: 'back.out(1.7)' }, '-=0.4')
         // H1 title envelope
-        .to('.hero-main-title', { opacity: 1, scale: 1, duration: 0.65, ease: 'expo.out' }, '-=0.4')
+        .to('.hero-main-title', { opacity: 1, scale: 1, duration: 0.5, ease: 'expo.out' }, '-=0.5')
         // CHARS drop from above with elastic squash-and-stretch
         .to('.hero-title-char', {
           yPercent: 0, scaleY: 1, scaleX: 1, opacity: 1, filter: 'blur(0px)',
           color: '#ffffff',
-          stagger: 0.055,
-          duration: 1.2,
+          stagger: 0.04,
+          duration: 0.9,
           ease: 'elastic.out(1, 0.55)',
         }, '<0.1')
         // Subtle whole-word pulse after all letters land — settles the feel
         .to('.hero-title-word', {
           scale: 1.03,
-          duration: 0.22,
+          duration: 0.18,
           ease: 'power2.out',
-          stagger: 0.08,
-        }, '-=0.4')
+          stagger: 0.06,
+        }, '-=0.3')
         .to('.hero-title-word', {
           scale: 1,
-          duration: 0.5,
+          duration: 0.4,
           ease: 'elastic.out(1, 0.5)',
-          stagger: 0.08,
-        }, '-=0.3')
-        // Subtitle paragraph + words cascade
-        .to('.hero-main-sub', { opacity: 1, y: 0, duration: 0.55, ease: 'expo.out' }, '-=0.45')
-        .to('.sub-word', { yPercent: 0, opacity: 1, stagger: 0.05, duration: 0.65 }, '<0.05')
+          stagger: 0.06,
+        }, '-=0.25')
+        // Subtitle paragraph + words cascade - APARECE MÁS RÁPIDO
+        .to('.hero-main-sub', { opacity: 1, y: 0, duration: 0.4, ease: 'expo.out' }, '-=0.8')
+        .to('.sub-word', { yPercent: 0, opacity: 1, stagger: 0.03, duration: 0.45 }, '<0.05')
         // CTA button springs in from right
         .to('.hero-main-cta', { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.8 }, '-=0.65')
         .to('.cta-char', { opacity: 1, x: 0, stagger: 0.035, duration: 0.5 }, '<0.15')
@@ -187,16 +198,10 @@ export default function Hero({ lang = 'es' }) {
                 <path d="M9 9c-0.5 0-1 0.5-1 1.2 0 2.5 2.3 4.8 4.8 4.8 0.7 0 1.2-0.5 1.2-1l-1-1-1 0.5a3.5 3.5 0 0 1-2.5-2.5l0.5-1-1-1z" />
               </svg>
             </a>
-            <a href="https://facebook.com/framestudio.devv" target="_blank" rel="noopener noreferrer" className="hs-link hs-link--fb" aria-label="Facebook">
+            <a href="https://www.facebook.com/share/14YwKonczfm/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" className="hs-link hs-link--fb" aria-label="Facebook">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="12" cy="12" r="9" />
                 <path d="M13.5 8H15V5.5h-1.5c-1.1 0-2 0.9-2 2V10h-1.5v2h1.5v6h2v-6H15l0.5-2h-2v-1a0.5 0.5 0 0 1 0.5-0.5z" />
-              </svg>
-            </a>
-            <a href="https://x.com/framestudio_dev" target="_blank" rel="noopener noreferrer" className="hs-link hs-link--x" aria-label="X">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                <rect x="3" y="3" width="18" height="18" rx="4" />
-                <path d="M7 7l10 10M17 7L7 17" />
               </svg>
             </a>
             <a href="mailto:studioframe.dev@gmail.com" className="hs-link hs-link--em" aria-label="Email">
@@ -239,7 +244,14 @@ export default function Hero({ lang = 'es' }) {
         </div>
 
         <div className="hero-media">
-          <video className="hero-media-video" autoPlay muted loop playsInline>
+          <video 
+            className="hero-media-video" 
+            autoPlay 
+            muted 
+            loop 
+            playsInline
+            preload="auto"
+          >
             <source src="/absolute.mp4" type="video/mp4" />
           </video>
           <div className="hero-media-overlay" />

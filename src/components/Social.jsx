@@ -37,27 +37,12 @@ const SOCIALS = [
     id: 'facebook',
     label: 'framestudio.devv',
     handle: 'Facebook',
-    href: 'https://facebook.com/framestudio.devv',
+    href: 'https://www.facebook.com/share/14YwKonczfm/?mibextid=wwXIfr',
     color: '#1877F2',
     Icon: () => (
       <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
         <circle className="fb-circle" cx="24" cy="24" r="18" />
         <path className="fb-f" d="M27 16h3v-4h-3c-2.2 0-4 1.8-4 4v4h-3v4h3v12h4V24h3l1-4h-4v-3a1 1 0 0 1 1-1z" fill="currentColor" />
-      </svg>
-    ),
-  },
-  {
-    id: 'x',
-    label: '@framestudio_dev',
-    handle: 'X / Twitter',
-    href: 'https://x.com/framestudio_dev',
-    color: '#ffffff',
-    Icon: () => (
-      <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-        <rect className="x-box" x="7" y="7" width="34" height="34" rx="8" />
-        <g className="x-mark" transform-origin="24 24">
-          <path d="M14 14l20 20M34 14L14 34" />
-        </g>
       </svg>
     ),
   },

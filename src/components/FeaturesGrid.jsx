@@ -50,20 +50,20 @@ const ICONS = {
 export default function FeaturesGrid({ lang = 'es' }) {
   const data = {
     es: [
-      { id: 'layers', title: 'Capas y Grupos\nOrganizados' },
-      { id: 'diamond', title: 'Estilos de Diseño\nPremium' },
-      { id: 'text', title: 'Familias Tipográficas\nModernas' },
-      { id: 'pen', title: 'Iconos y Recursos\nIncluidos' },
-      { id: 'atom', title: 'Librería de\nComponentes' },
-      { id: 'brush', title: 'Completamente\nPersonalizable' }
+      { id: 'layers', title: 'Sitios Web\nProfesionales' },
+      { id: 'diamond', title: 'Branding e Identidad\nVisual' },
+      { id: 'text', title: 'Experiencias de Usuario\nÚnicas' },
+      { id: 'pen', title: 'Diseño UI/UX\nPersonalizado' },
+      { id: 'atom', title: 'Aplicaciones Web\nInteractivas' },
+      { id: 'brush', title: 'Animaciones y Efectos\nCinematográficos' }
     ],
     en: [
-      { id: 'layers', title: 'Organized Layers\n& Groups' },
-      { id: 'diamond', title: 'Premium Design\nStyles' },
-      { id: 'text', title: 'Modern Font\nFamily' },
-      { id: 'pen', title: 'Free Icons\nIncluded' },
-      { id: 'atom', title: 'Component\nLibrary' },
-      { id: 'brush', title: 'Fully\nCustomizable' }
+      { id: 'layers', title: 'Professional\nWebsites' },
+      { id: 'diamond', title: 'Branding & Visual\nIdentity' },
+      { id: 'text', title: 'Unique User\nExperiences' },
+      { id: 'pen', title: 'Custom UI/UX\nDesign' },
+      { id: 'atom', title: 'Interactive Web\nApplications' },
+      { id: 'brush', title: 'Cinematic Animations\n& Effects' }
     ]
   }
 

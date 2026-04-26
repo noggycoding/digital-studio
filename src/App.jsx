@@ -3,13 +3,12 @@ import Lenis from 'lenis'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import CustomCursor from './components/CustomCursor'
-import PageLoader from './components/PageLoader'
+import IntroAnimation from './components/IntroAnimation'
 import SectionSkeleton from './components/SectionSkeleton'
 import { initScrollAnimations, refreshScrollAnimations } from './utils/scrollAnimations'
 
 // Lazy load below-the-fold components
 const Services = lazy(() => import('./components/Services'))
-const FeaturesGrid = lazy(() => import('./components/FeaturesGrid'))
 const Portfolio = lazy(() => import('./components/Portfolio'))
 const About = lazy(() => import('./components/About'))
 const QuoteBanner = lazy(() => import('./components/QuoteBanner'))
@@ -19,7 +18,7 @@ const LangFlash = lazy(() => import('./components/LangFlash'))
 const ChatBot = lazy(() => import('./components/ChatBot'))
 
 export default function App() {
-  const [loaded, setLoaded]       = useState(false)
+  const [introComplete, setIntroComplete] = useState(false)
   const [lang, setLang]           = useState('es')
   const [flashKey, setFlashKey]   = useState(0)
   const flashLang                 = useRef('es')
@@ -28,6 +27,10 @@ export default function App() {
     setLang(code)
     flashLang.current = code
     setFlashKey(k => k + 1)
+  }
+
+  const handleIntroComplete = () => {
+    setIntroComplete(true)
   }
 
   useEffect(() => {
@@ -42,8 +45,6 @@ export default function App() {
       requestAnimationFrame(raf)
     }
     requestAnimationFrame(raf)
-
-    const timer = setTimeout(() => setLoaded(true), 2700)
 
     // Register scroll-driven animations for elements already in the DOM.
     // Lazy-loaded sections call the same helper again when they mount.
@@ -98,7 +99,6 @@ export default function App() {
 
     return () => {
       lenis.destroy()
-      clearTimeout(timer)
       clearTimeout(vidTimer)
       scanTimers.forEach(clearTimeout)
       window.removeEventListener('load', onLoad)
@@ -109,7 +109,7 @@ export default function App() {
 
   return (
     <>
-      <PageLoader loaded={loaded} />
+      <IntroAnimation onComplete={handleIntroComplete} />
       <CustomCursor />
       <Suspense fallback={null}>
         <LangFlash lang={flashLang.current} flashKey={flashKey} />
@@ -121,12 +121,9 @@ export default function App() {
       </Suspense>
 
       <main>
-        <Hero lang={lang} />
+        <Hero lang={lang} skipIntroAnimation={introComplete} />
         <Suspense fallback={<SectionSkeleton />}>
           <Services lang={lang} />
-        </Suspense>
-        <Suspense fallback={<SectionSkeleton />}>
-          <FeaturesGrid lang={lang} />
         </Suspense>
         <Suspense fallback={<SectionSkeleton />}>
           <Portfolio lang={lang} />
