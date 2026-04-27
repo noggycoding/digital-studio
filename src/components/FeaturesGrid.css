@@ -179,13 +179,33 @@
 
 @media (max-width: 640px) {
   .neu-features-sec {
-    padding: 6rem 1.5rem;
+    padding: 5rem 1.2rem;
+  }
+  .neu-features-header {
+    margin-bottom: 2.5rem;
+  }
+  .neu-features-title {
+    font-size: clamp(1.6rem, 6vw, 2.4rem);
   }
   .neu-features-grid {
     grid-template-columns: 1fr;
-    gap: 1.5rem;
+    gap: 1.2rem;
   }
   .neu-card {
-    padding: 2rem 1.8rem;
+    padding: 1.6rem 1.4rem;
+    gap: 1.2rem;
+  }
+  .neu-icon-wrap {
+    width: 54px;
+    height: 54px;
+  }
+}
+
+@media (max-width: 420px) {
+  .neu-features-sec {
+    padding: 4rem 1rem;
+  }
+  .neu-card {
+    padding: 1.4rem 1.2rem;
   }
 }

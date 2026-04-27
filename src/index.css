@@ -457,3 +457,11 @@ html.lenis, html.lenis body {
   z-index: 3;
   pointer-events: none;
 }
+
+/* ── Global mobile adjustments ── */
+@media (max-width: 520px) {
+  body { font-size: 16px; }
+
+  .section-fade-top,
+  .section-fade-bottom { height: 120px; }
+}
