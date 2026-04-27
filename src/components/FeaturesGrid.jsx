@@ -1,4 +1,3 @@
-import { useRef } from 'react'
 import { motion } from 'motion/react'
 import './FeaturesGrid.css'
 
