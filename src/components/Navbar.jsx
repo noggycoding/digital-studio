@@ -36,7 +36,7 @@ export default function Navbar({ onLangChange, lang = 'es' }) {
     <nav className={`hero-nav${scrolled ? ' hero-nav--scrolled' : ''}`}>
       <a href="#hero" className="nav-logo">
         <img src="/logo sin bg.png" alt="Frame Studio" className="nav-logo-img" loading="eager" decoding="async" />
-        <span className="nav-logo-text">FRAME<span className="logo-accent"> STUDIO.</span></span>
+        <span className="nav-logo-text">studioframe</span>
       </a>
 
       <div className={`nav-links${menuOpen ? ' nav-links--open' : ''}`}>

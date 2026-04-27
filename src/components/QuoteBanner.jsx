@@ -92,14 +92,14 @@ export default function QuoteBanner({ lang = 'es' }) {
       <div className="qb-sun-wrap" aria-hidden="true">
         <span className="qb-sun-glow" />
         <svg className="qb-sun" width="48" height="48" viewBox="0 0 48 48" fill="none">
-          <circle cx="24" cy="24" r="8" stroke="currentColor" strokeWidth="1.2" opacity="0.7" />
-          <circle cx="24" cy="24" r="4" fill="currentColor" opacity="0.4" />
+          <circle cx="24" cy="24" r="7" fill="currentColor" fillOpacity="0.18" stroke="currentColor" strokeWidth="1.5" opacity="0.75"/>
+          <circle cx="24" cy="24" r="3.5" fill="currentColor" fillOpacity="0.55"/>
           {[0, 45, 90, 135, 180, 225, 270, 315].map(deg => (
             <line
               key={deg}
-              x1="24" y1="10" x2="24" y2="6"
-              stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"
-              opacity="0.55"
+              x1="24" y1="9" x2="24" y2="5"
+              stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"
+              opacity="0.5"
               transform={`rotate(${deg} 24 24)`}
             />
           ))}

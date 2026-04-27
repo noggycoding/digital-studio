@@ -166,22 +166,25 @@ html.lenis, html.lenis body {
 
 /* ── Page loader ── */
 /* ═══════════════════════════════════════════════════════════
-   PAGE LOADER — Cinematic entry:
-   1. Cube fades in centered
-   2. Cube slides left
-   3. Wordmark reveals char-by-char
-   4. Three dots bounce continuously below
+   PAGE LOADER — Clean minimal intro → settles into navbar
+   0.1s  Cube fades in (simple scale reveal)
+   0.6s  Wordmark slides open, characters drop in
+   1.4s  Tagline appears
+   1.7s  Dots bounce
+   ~3.0s loaded: secondary elements fade, stage drifts to
+         top-left navbar position, then overlay fades out
    ═══════════════════════════════════════════════════════════ */
 .page-loader {
   position: fixed;
   inset: 0;
   z-index: 10000;
-  background: radial-gradient(ellipse at center, #0a0a0e 0%, var(--black) 70%);
+  background: var(--bg-primary);
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
-              visibility 0.9s ease;
+  overflow: hidden;
+  transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.2s,
+              visibility 0.8s ease 0.2s;
 }
 
 .page-loader.loaded {
@@ -190,114 +193,158 @@ html.lenis, html.lenis body {
   pointer-events: none;
 }
 
+/* ── Background glow ── */
+.loader-bg-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 50vw;
+  height: 50vw;
+  max-width: 500px;
+  max-height: 500px;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, rgba(180, 210, 255, 0.1) 0%, transparent 65%);
+  filter: blur(50px);
+  pointer-events: none;
+  opacity: 0;
+  animation: bg-glow-in 1.5s ease 0.2s forwards;
+}
+
+@keyframes bg-glow-in {
+  to { opacity: 1; }
+}
+
+/* ── Stage ── */
 .loader-stage {
   position: relative;
+  z-index: 2;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2.4rem;
+  gap: 1.4rem;
 }
 
+/* ── Logo mark ── */
 .loader-mark {
   display: inline-flex;
   align-items: center;
   position: relative;
 }
 
-/* ── Cube: appears alone, centered; wordmark pushes it left as it expands ── */
+.loader-cube-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .loader-cube {
-  width: clamp(64px, 9vw, 96px);
+  width: clamp(64px, 8vw, 88px);
   height: auto;
-  filter: drop-shadow(0 6px 22px rgba(180, 210, 255, 0.35));
+  filter: drop-shadow(0 6px 24px rgba(180, 210, 255, 0.3));
   opacity: 0;
-  transform: scale(0.6);
-  animation:
-    cube-appear  0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.15s forwards,
-    cube-breathe 2.4s ease-in-out 1.9s infinite;
+  transform: scale(0.7);
+  animation: cube-build 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.1s forwards;
 }
 
-@keyframes cube-appear {
-  0%   { opacity: 0; transform: scale(0.6); filter: blur(10px) drop-shadow(0 6px 22px rgba(180, 210, 255, 0.35)); }
-  100% { opacity: 1; transform: scale(1);   filter: blur(0)    drop-shadow(0 6px 22px rgba(180, 210, 255, 0.35)); }
+@keyframes cube-build {
+  0%   { opacity: 0; transform: scale(0.7); filter: blur(6px) drop-shadow(0 6px 24px rgba(180, 210, 255, 0.3)); }
+  100% { opacity: 1; transform: scale(1);   filter: blur(0)   drop-shadow(0 6px 24px rgba(180, 210, 255, 0.3)); }
 }
 
-@keyframes cube-breathe {
-  0%, 100% { transform: scale(1);    }
-  50%      { transform: scale(1.04); }
-}
-
-/* ── Wordmark: starts with 0 width so the cube is visually centered alone
-      Expands smoothly, pushing the cube to the left via layout (no transform). ── */
+/* ── Wordmark ── */
 .loader-word {
   display: inline-flex;
   font-family: var(--font-body);
-  font-size: clamp(1.6rem, 2.6vw, 2.2rem);
+  font-size: clamp(1.4rem, 2.4vw, 2rem);
   font-weight: 400;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.05em;
   color: #fff;
   overflow: hidden;
   max-width: 0;
   margin-left: 0;
   white-space: nowrap;
-  animation: loader-word-expand 0.55s cubic-bezier(0.65, 0, 0.35, 1) 1.1s forwards;
+  padding: 0.1em 0;
+  animation: loader-word-expand 0.5s cubic-bezier(0.65, 0, 0.35, 1) 0.6s forwards;
 }
 
 @keyframes loader-word-expand {
-  from { max-width: 0;     margin-left: 0;      }
-  to   { max-width: 14ch;  margin-left: 0.4em;  }
+  from { max-width: 0;    margin-left: 0;     }
+  to   { max-width: 14ch; margin-left: 0.4em; }
 }
 
 .loader-char {
   display: inline-block;
+}
+
+.loader-char-inner {
+  display: inline-block;
   opacity: 0;
-  transform: translateY(110%);
-  animation: loader-char-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  transform: translateY(-50%);
+  animation: loader-char-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
 @keyframes loader-char-in {
-  0%   { opacity: 0; transform: translateY(110%); }
+  0%   { opacity: 0; transform: translateY(-50%); }
   100% { opacity: 1; transform: translateY(0);    }
 }
 
-/* ── Three bouncing dots ──────────────────────────────── */
-.loader-dots {
+/* ── Tagline with side lines ── */
+.loader-tagline {
   display: flex;
-  gap: 0.55rem;
+  align-items: center;
+  gap: 0.8rem;
   opacity: 0;
-  animation: loader-dots-in 0.5s ease 0.8s forwards;
+  animation: loader-tagline-in 0.5s ease 1.4s forwards;
 }
 
-@keyframes loader-dots-in {
+@keyframes loader-tagline-in {
   from { opacity: 0; transform: translateY(6px); }
   to   { opacity: 1; transform: translateY(0);   }
 }
 
-.loader-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: rgba(221, 232, 255, 0.85);
-  box-shadow: 0 0 8px rgba(180, 210, 255, 0.4);
-  animation: loader-dot-jump 1.3s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+.loader-line-deco {
+  width: 26px;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(180, 210, 255, 0.5), transparent);
 }
 
-.loader-dot:nth-child(1) { animation-delay: 0s;    }
-.loader-dot:nth-child(2) { animation-delay: 0.18s; }
-.loader-dot:nth-child(3) { animation-delay: 0.36s; }
+.loader-tagline-text {
+  font-family: var(--font-heading, 'Space Grotesk'), sans-serif;
+  font-size: 0.58rem;
+  font-weight: 500;
+  letter-spacing: 0.4em;
+  color: rgba(221, 232, 255, 0.65);
+}
+
+/* ── Dots ── */
+.loader-dots {
+  display: flex;
+  gap: 0.5rem;
+  opacity: 0;
+  animation: loader-dots-in 0.4s ease 1.7s forwards;
+}
+
+@keyframes loader-dots-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.loader-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: rgba(221, 232, 255, 0.7);
+  animation: loader-dot-jump 1.2s ease-in-out 1.8s infinite;
+}
+
+.loader-dot:nth-child(1) { animation-delay: 1.8s;  }
+.loader-dot:nth-child(2) { animation-delay: 1.95s; }
+.loader-dot:nth-child(3) { animation-delay: 2.10s; }
 
 @keyframes loader-dot-jump {
-  0%, 70%, 100% {
-    transform: translateY(0) scale(1);
-    opacity: 0.6;
-  }
-  25% {
-    transform: translateY(-10px) scale(1.15);
-    opacity: 1;
-  }
-  45% {
-    transform: translateY(0) scale(0.9);
-    opacity: 0.8;
-  }
+  0%, 60%, 100% { transform: translateY(0);    opacity: 0.5; }
+  30%           { transform: translateY(-8px); opacity: 1;   }
 }
 
 

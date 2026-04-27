@@ -218,6 +218,37 @@
   gap: 1rem;
 }
 
+.ct-submit:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.ct-submit-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255,255,255,0.25);
+  border-top-color: rgba(255,255,255,0.85);
+  border-radius: 50%;
+  animation: ct-spin 0.7s linear infinite;
+}
+
+@keyframes ct-spin {
+  to { transform: rotate(360deg); }
+}
+
+.ct-form-error {
+  font-size: 0.82rem;
+  color: rgba(255,140,140,0.9);
+  margin: 0.2rem 0 0.4rem;
+}
+
+.ct-form-success {
+  font-size: 0.82rem;
+  color: rgba(140,220,160,0.9);
+  margin: 0.2rem 0 0.4rem;
+}
+
 /* ── Sidebar ── */
 .ct-sidebar {
   display: flex;

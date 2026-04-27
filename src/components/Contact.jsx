@@ -1,45 +1,46 @@
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { translations } from '../i18n/translations'
+import { sanitize, isValidEmail, checkSubmitThrottle } from '../utils/sanitize'
 import './Contact.css'
 
 function ContactIcon({ name }) {
-  const common = {
+  const p = {
     width: 20, height: 20, viewBox: '0 0 24 24',
-    fill: 'none', stroke: 'currentColor', strokeWidth: 1.4,
+    fill: 'none', stroke: 'currentColor', strokeWidth: 1.8,
     strokeLinecap: 'round', strokeLinejoin: 'round',
   }
   switch (name) {
     case 'mail':
       return (
-        <svg {...common}>
-          <rect className="ic-mail-body" x="3" y="5" width="18" height="14" rx="2" />
-          <path className="ic-mail-flap" d="M3 7l9 6 9-6" />
-          <path className="ic-mail-spark" d="M17 3l0.7 1.5L19 5l-1.3 0.5L17 7l-0.7-1.5L15 5l1.3-0.5z" />
+        <svg {...p}>
+          <rect className="ic-mail-body" x="2" y="4" width="20" height="16" rx="2"/>
+          <path className="ic-mail-flap" d="M2 6l10 7 10-7"/>
+          <path className="ic-mail-spark" d="M17 2l.8 1.6L19.5 4l-1.7.4L17 6l-.8-1.6L14.5 4l1.7-.4z" fill="currentColor" stroke="none"/>
         </svg>
       )
     case 'phone':
       return (
-        <svg {...common}>
-          <path className="ic-phone-body" d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7 12.8 12.8 0 0 0 .7 2.8 2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.5 12.8 12.8 0 0 0 2.8.7A2 2 0 0 1 22 16.9z" />
-          <path className="ic-phone-wave ic-phone-wave--1" d="M15.5 6.5a4 4 0 0 1 2 2" />
-          <path className="ic-phone-wave ic-phone-wave--2" d="M14.5 3.5a7.5 7.5 0 0 1 6 6" />
+        <svg {...p}>
+          <path className="ic-phone-body" d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.13.97.36 1.92.7 2.83a2 2 0 0 1-.45 2.11L8.09 9.9a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.86.57 2.83.7A2 2 0 0 1 22 16.9z"/>
+          <path className="ic-phone-wave ic-phone-wave--1" d="M15.5 6.5a4 4 0 0 1 2 2"/>
+          <path className="ic-phone-wave ic-phone-wave--2" d="M14 3a8 8 0 0 1 7 7"/>
         </svg>
       )
     case 'pin':
       return (
-        <svg {...common}>
-          <path className="ic-pin-body" d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 1 1 18 0z" />
-          <circle className="ic-pin-dot" cx="12" cy="10" r="2.8" fill="currentColor" />
-          <ellipse className="ic-pin-shadow" cx="12" cy="22" rx="4" ry="0.9" fill="currentColor" opacity="0.3" />
+        <svg {...p}>
+          <path className="ic-pin-body" d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 1 1 18 0z"/>
+          <circle className="ic-pin-dot" cx="12" cy="10" r="3" fill="currentColor"/>
+          <ellipse className="ic-pin-shadow" cx="12" cy="22.5" rx="3.5" ry="0.8" fill="currentColor" opacity="0.25" stroke="none"/>
         </svg>
       )
     case 'clock':
       return (
-        <svg {...common}>
-          <circle className="ic-clock-face" cx="12" cy="12" r="9" />
-          <line className="ic-clock-hour"   x1="12" y1="12" x2="12" y2="7"  />
-          <line className="ic-clock-minute" x1="12" y1="12" x2="16" y2="12" />
-          <circle className="ic-clock-center" cx="12" cy="12" r="1" fill="currentColor" />
+        <svg {...p}>
+          <circle className="ic-clock-face" cx="12" cy="12" r="10"/>
+          <polyline className="ic-clock-hour"   points="12,7 12,12"/>
+          <polyline className="ic-clock-minute" points="12,12 16,12"/>
+          <circle className="ic-clock-center" cx="12" cy="12" r="1.2" fill="currentColor" stroke="none"/>
         </svg>
       )
     default:
@@ -50,6 +51,61 @@ function ContactIcon({ name }) {
 export default function Contact({ lang = 'es' }) {
   const sectionRef = useRef(null)
   const s = (translations[lang] || translations.es).sections.contact
+
+  const [fields, setFields] = useState({ name: '', email: '', service: '', message: '' })
+  const [status, setStatus] = useState('idle') // 'idle' | 'sending' | 'success' | 'error'
+  const [errorMsg, setErrorMsg] = useState('')
+
+  const set = (k) => (e) => setFields(f => ({ ...f, [k]: e.target.value }))
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    if (status === 'sending' || status === 'success') return
+
+    if (!checkSubmitThrottle()) {
+      setErrorMsg(lang === 'en' ? 'Please wait before sending again.' : 'Espera un momento antes de volver a enviar.')
+      setStatus('error')
+      return
+    }
+
+    const name    = sanitize(fields.name,    100)
+    const email   = sanitize(fields.email,   200)
+    const service = sanitize(fields.service, 100)
+    const message = sanitize(fields.message, 2000)
+
+    if (!name || !email || !message) {
+      setErrorMsg(lang === 'en' ? 'Name, email and message are required.' : 'Nombre, email y mensaje son requeridos.')
+      setStatus('error')
+      return
+    }
+    if (!isValidEmail(email)) {
+      setErrorMsg(lang === 'en' ? 'Enter a valid email address.' : 'Ingresa un email valido.')
+      setStatus('error')
+      return
+    }
+
+    setStatus('sending')
+    setErrorMsg('')
+
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, service, message, _hp: '' }),
+      })
+      const data = await res.json()
+      if (res.ok && data.ok) {
+        setStatus('success')
+        setFields({ name: '', email: '', service: '', message: '' })
+      } else {
+        setErrorMsg(data.error || (lang === 'en' ? 'Something went wrong.' : 'Ocurrio un error.'))
+        setStatus('error')
+      }
+    } catch {
+      setErrorMsg(lang === 'en' ? 'Network error. Try again.' : 'Error de red. Intenta de nuevo.')
+      setStatus('error')
+    }
+  }
 
   return (
     <section className="contact" id="contact" ref={sectionRef}>
@@ -78,33 +134,50 @@ export default function Contact({ lang = 'es' }) {
 
         <div className="ct-body">
           <div className="ct-form-card" data-aos="fade-left" data-aos-delay="100" data-aos-duration="950">
-          <form className="ct-form" onSubmit={e => e.preventDefault()}>
+          <form className="ct-form" onSubmit={handleSubmit}>
+            <input type="text" name="_hp" style={{ display: 'none' }} tabIndex={-1} autoComplete="off" />
             <div className="ct-form-row">
               <div className="ct-field" data-aos="fade-up-right" data-aos-delay="200">
                 <label className="ct-label" htmlFor="ct-name">{s.form.name}</label>
-                <input className="ct-input" id="ct-name" type="text" placeholder={s.form.namePlaceholder} autoComplete="name" />
+                <input className="ct-input" id="ct-name" type="text" placeholder={s.form.namePlaceholder} autoComplete="name" value={fields.name} onChange={set('name')} />
               </div>
               <div className="ct-field" data-aos="fade-up-left" data-aos-delay="300">
                 <label className="ct-label" htmlFor="ct-email">{s.form.email}</label>
-                <input className="ct-input" id="ct-email" type="email" placeholder={s.form.emailPlaceholder} autoComplete="email" />
+                <input className="ct-input" id="ct-email" type="email" placeholder={s.form.emailPlaceholder} autoComplete="email" value={fields.email} onChange={set('email')} />
               </div>
             </div>
             <div className="ct-field" data-aos="fade-up-right" data-aos-delay="380">
               <label className="ct-label" htmlFor="ct-service">{s.form.service}</label>
-              <select className="ct-input ct-select" id="ct-service" defaultValue="">
+              <select className="ct-input ct-select" id="ct-service" value={fields.service} onChange={set('service')}>
                 <option value="" disabled>{s.form.servicePlaceholder}</option>
                 {s.form.services.map(sv => <option key={sv}>{sv}</option>)}
               </select>
             </div>
             <div className="ct-field" data-aos="fade-up-left" data-aos-delay="460">
               <label className="ct-label" htmlFor="ct-msg">{s.form.message}</label>
-              <textarea className="ct-input ct-textarea" id="ct-msg" rows="5" placeholder={s.form.messagePlaceholder} />
+              <textarea className="ct-input ct-textarea" id="ct-msg" rows="5" placeholder={s.form.messagePlaceholder} value={fields.message} onChange={set('message')} />
             </div>
-            <button className="ct-submit" data-aos="zoom-out-right" data-aos-delay="560" type="submit">
-              <span>{s.form.submit}</span>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                <path d="M5 12h14M14 6l6 6-6 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
+
+            {status === 'error' && (
+              <p className="ct-form-error">{errorMsg}</p>
+            )}
+            {status === 'success' && (
+              <p className="ct-form-success">
+                {lang === 'en' ? 'Message sent! We will get back to you soon.' : 'Mensaje enviado. Te contactaremos pronto.'}
+              </p>
+            )}
+
+            <button className="ct-submit" data-aos="zoom-out-right" data-aos-delay="560" type="submit" disabled={status === 'sending' || status === 'success'}>
+              {status === 'sending' ? (
+                <span className="ct-submit-spinner" />
+              ) : (
+                <>
+                  <span>{status === 'success' ? (lang === 'en' ? 'Sent' : 'Enviado') : s.form.submit}</span>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                    <path d="M5 12h14M14 6l6 6-6 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </>
+              )}
             </button>
           </form>
           </div>

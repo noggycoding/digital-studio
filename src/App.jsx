@@ -3,6 +3,7 @@ import Lenis from 'lenis'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import CustomCursor from './components/CustomCursor'
+import PageLoader from './components/PageLoader'
 import SectionSkeleton from './components/SectionSkeleton'
 import { initScrollAnimations, refreshScrollAnimations } from './utils/scrollAnimations'
 
@@ -17,6 +18,7 @@ const LangFlash = lazy(() => import('./components/LangFlash'))
 const ChatBot = lazy(() => import('./components/ChatBot'))
 
 export default function App() {
+  const [loaded, setLoaded]       = useState(false)
   const [lang, setLang]           = useState('es')
   const [flashKey, setFlashKey]   = useState(0)
   const flashLang                 = useRef('es')
@@ -39,6 +41,8 @@ export default function App() {
       requestAnimationFrame(raf)
     }
     requestAnimationFrame(raf)
+
+    const timer = setTimeout(() => setLoaded(true), 3000)
 
     // Register scroll-driven animations for elements already in the DOM.
     // Lazy-loaded sections call the same helper again when they mount.
@@ -93,6 +97,7 @@ export default function App() {
 
     return () => {
       lenis.destroy()
+      clearTimeout(timer)
       clearTimeout(vidTimer)
       scanTimers.forEach(clearTimeout)
       window.removeEventListener('load', onLoad)
@@ -103,6 +108,7 @@ export default function App() {
 
   return (
     <>
+      <PageLoader loaded={loaded} />
       <CustomCursor />
       <Suspense fallback={null}>
         <LangFlash lang={flashLang.current} flashKey={flashKey} />

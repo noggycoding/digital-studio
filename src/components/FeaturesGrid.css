@@ -1,85 +1,185 @@
-.neu-features-sec {
-  padding: 6rem 2rem;
-  background-color: var(--bg-primary);
+.neu-features-header {
+  text-align: center;
+  margin-bottom: 4rem;
   display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  max-width: 600px;
+  width: 100%;
+}
+
+.neu-features-eyebrow {
+  font-family: var(--font-heading);
+  font-size: 0.66rem;
+  font-weight: 500;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: rgba(180, 210, 255, 0.65);
+}
+
+.neu-features-title {
+  font-family: var(--font-body);
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-weight: 200;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: #fff;
+}
+
+.neu-features-title em {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 300;
+  color: rgba(221, 232, 255, 0.7);
+}
+
+.neu-features-sec {
+  padding: 8rem 2rem;
+  background-color: #060606;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
   position: relative;
+  overflow: hidden;
   z-index: 10;
 }
 
 .neu-features-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 2.5rem;
-  max-width: 1050px;
+  gap: 2rem;
+  max-width: 1200px;
   width: 100%;
+  position: relative;
+  z-index: 2;
 }
 
 .neu-card {
-  background-color: #1a1a1e;
-  border-radius: 20px;
-  padding: 2.2rem 2rem;
+  position: relative;
+  background: rgba(17, 17, 20, 0.4);
+  backdrop-filter: blur(10px);
+  border-radius: 24px;
+  padding: 2.5rem 2rem;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  /* Neumorphic outer shadow: dark right-bottom, light top-left */
-  box-shadow: 
-    -6px -6px 16px rgba(255, 255, 255, 0.02),
-    6px 6px 16px rgba(0, 0, 0, 0.6);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
   border: 1px solid rgba(255, 255, 255, 0.03);
+  overflow: hidden;
+  transition: border-color 0.4s ease, box-shadow 0.4s ease;
 }
 
 .neu-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 
-    -8px -8px 20px rgba(255, 255, 255, 0.04),
-    8px 8px 20px rgba(0, 0, 0, 0.5);
+  border-color: rgba(180, 210, 255, 0.15);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), inset 0 0 20px rgba(180, 210, 255, 0.02);
 }
 
-.neu-icon-wrap {
-  width: 58px;
-  height: 58px;
+/* ── Card Glow ── */
+.neu-card-glow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), 
+              rgba(180, 210, 255, 0.08) 0%, 
+              transparent 70%);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.neu-card:hover .neu-card-glow {
+  opacity: 1;
+}
+
+/* ── Background Deco ── */
+.neu-card-bg-deco {
+  position: absolute;
+  bottom: -20px;
+  right: -20px;
+  width: 100px;
+  height: 100px;
+  background: radial-gradient(circle, rgba(180, 210, 255, 0.03) 0%, transparent 70%);
   border-radius: 50%;
-  background: #1a1a1e;
+  filter: blur(20px);
+  transition: transform 0.6s ease, background 0.6s ease;
+  z-index: 0;
+}
+
+.neu-card:hover .neu-card-bg-deco {
+  transform: scale(1.5);
+  background: radial-gradient(circle, rgba(180, 210, 255, 0.06) 0%, transparent 70%);
+}
+
+/* ── Icon wrapper ── */
+.neu-icon-wrap {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, rgba(180, 210, 255, 0.08), rgba(180, 210, 255, 0.02));
+  border: 1px solid rgba(180, 210, 255, 0.1);
   display: flex;
   align-items: center;
   justify-content: center;
-  /* Neumorphic outer shadow for the circle to make it pop out */
-  box-shadow: 
-    -4px -4px 10px rgba(255, 255, 255, 0.04),
-    4px 4px 10px rgba(0, 0, 0, 0.4);
-  margin-bottom: 0.5rem;
-  position: relative;
+  flex-shrink: 0;
+  z-index: 2;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.neu-card:hover .neu-icon-wrap {
+  transform: rotate(5deg) scale(1.05);
+  background: linear-gradient(135deg, rgba(180, 210, 255, 0.15), rgba(180, 210, 255, 0.05));
+  border-color: rgba(180, 210, 255, 0.3);
+  box-shadow: 0 0 20px rgba(180, 210, 255, 0.1);
 }
 
 .neu-icon-wrap svg {
-  width: 24px;
-  height: 24px;
-  color: #fff;
-  opacity: 0.85;
+  width: 28px;
+  height: 28px;
+  color: #c9dfff;
+  filter: drop-shadow(0 0 8px rgba(180, 210, 255, 0.3));
+}
+
+/* ── Text ── */
+.neu-card-body {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  z-index: 2;
 }
 
 .neu-title {
-  color: rgba(255, 255, 255, 0.85);
-  font-family: var(--font-sans);
-  font-size: 0.95rem;
-  line-height: 1.5;
-  font-weight: 300;
-  letter-spacing: 0.02em;
+  color: #ffffff;
+  font-family: 'Inter', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
 }
 
-/* RESPONSIVE */
-@media (max-width: 900px) {
+.neu-subtitle {
+  color: rgba(255, 255, 255, 0.5);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+/* ── Responsive ── */
+@media (max-width: 1024px) {
   .neu-features-grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 2rem;
+    padding: 0 1rem;
   }
 }
 
-@media (max-width: 520px) {
+@media (max-width: 640px) {
   .neu-features-sec {
-    padding: 4rem 1.5rem;
+    padding: 6rem 1.5rem;
   }
   .neu-features-grid {
     grid-template-columns: 1fr;
